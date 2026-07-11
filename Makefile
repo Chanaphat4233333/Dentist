@@ -1,3 +1,5 @@
-make test_linux:
-# 	source dentist-env/bin/activate.fish
-	python main.py
+SHELL := /bin/bash
+
+dev_linux:
+	@echo "Running test in virtual environment..."
+	./dentist-env/bin/python main.py

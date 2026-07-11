@@ -29,16 +29,16 @@ class Occ:
         OccL_non = self.L_non 
         OccCental = self.central 
         OccBIncline = self.B_incline 
-        Amin = self.theshold['A'][0]
-        Amax = self.theshold['A'][1]
-        Bmin = self.theshold['B'][0]
-        Bmax = self.theshold['B'][1]
-        Cmin = self.theshold['C'][0]
-        Cmax = self.theshold['C'][1]
+        Amin = float(self.theshold['A'][0])
+        Amax = float(self.theshold['A'][1])
+        Bmin = float(self.theshold['B'][0])
+        Bmax = float(self.theshold['B'][1])
+        Cmin = float(self.theshold['C'][0])
+        Cmax = float(self.theshold['C'][1])
         FileName = self.filename
         Grade = "N/A" 
 
-        list_OCc = [OccB, OccLInclineOfB, OccL_non, OccCental, OccBIncline, Amin, Amax, Bmin, Bmax, Cmin, Cmax, FileName, Grade]
+        list_OCc = [float(OccB), float(OccLInclineOfB), float(OccL_non), float(OccCental), float(OccBIncline), Amin, Amax, Bmin, Bmax, Cmin, Cmax, FileName, Grade]
         return list_OCc
 
     # เพิ่ม self เข้าไปเป็น parameter แรกของทุกฟังก์ชัน
@@ -106,7 +106,7 @@ class Occ:
         return Grade_L_of_B, score_L_of_B
     
     def OccLnon_function(self, list_OCc):
-        Amin = 1
+        Amin = float(1.0)
         Amax = list_OCc[6]
         Bmin, Bmax = list_OCc[7], list_OCc[8]
         Cmin, Cmax = list_OCc[9], list_OCc[10]
@@ -128,7 +128,7 @@ class Occ:
         return Grade_Lnon, score_Lnon
 
     def OccBofL_function(self, list_OCc):
-        Amin = 1
+        Amin = float(1.0)
         Amax = list_OCc[6]
         Bmin, Bmax = list_OCc[7], list_OCc[8]
         Cmin, Cmax = list_OCc[9], list_OCc[10]
@@ -154,7 +154,7 @@ class Occ:
         return final_score
 
     def WriteFileCsv(self, Grade_Occ_B, Grade_Cental_groove, Grade_L_of_B, Grade_Lnon, Grade_BofL, final_score):
-        df = pd.read_csv(self.filename, encoding="utf-8-sig")
+        df = pd.read_csv("results/" + self.filename, encoding="utf-8-sig")
         
         df.at[self.fixatrow, "ID"] = self.id
         df.at[self.fixatrow, "Name"] = self.name
@@ -166,4 +166,4 @@ class Occ:
         df.at[self.fixatrow, "OCC_L nonfunc_grade"] = Grade_Lnon
         df.at[self.fixatrow, "OCC_B incline of L cusp_grade"] = Grade_BofL
         
-        df.to_csv(self.filename, index=False, encoding="utf-8-sig")
+        df.to_csv("results/" + self.filename, index=False, encoding="utf-8-sig")

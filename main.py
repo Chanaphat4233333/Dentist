@@ -12,7 +12,7 @@ def loadConfig():
     return config
 def loadDataSet(path):
     data = pd.read_csv(path)
-    data_range = data.max_row -3
+    data_range = len(data) - 3
     
     return data, data_range
     
@@ -20,7 +20,7 @@ def loadDataSet(path):
 def cluster_35_PFMC(config, data, data_range):
     config35PFMC = config['cluster_35_PFMC']
     OCC_theshold = config35PFMC['OCC_theshold']
-    time_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    time_stamp = datetime.now().strftime("%Y-%m-%d")
     file_name = f"cluster_35_PFMC_{time_stamp}.csv"
     file_header = config35PFMC['Header_Format']
     folder_name_result = "results"
@@ -33,13 +33,13 @@ def cluster_35_PFMC(config, data, data_range):
     df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
     for i in range (data_range) :
         test = Occ(
-            id  = data.iloc[i+3,0],
-            name = data.iloc[i+3,2],
-            central=data.iloc[i+3,4],
-            Bfunc=data.iloc[i+3,5],
-            L_of_B=data.iloc[i+3,6],
-            L_non=data.iloc[i+3,7],
-            B_incline=data.iloc[i+3,8],
+            id  = data.iloc[i+2,0],
+            name = data.iloc[i+2,2],
+            central = float(data.iloc[i+2,4]),
+            Bfunc = float(data.iloc[i+2,5]),
+            L_of_B = float(data.iloc[i+2,6]),
+            L_non = float(data.iloc[i+2,7]),
+            B_incline = float(data.iloc[i+2,8]),
             theshold=OCC_theshold,
             filename = file_name,
             fixatrow = i+1
