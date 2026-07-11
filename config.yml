@@ -1,5 +1,74 @@
-OCC_theshold:
+Network:
+ host: 127.0.0.1
+ port: 3333
+ timeout: 300
+cluster_35_PFMC:
+ OCC_theshold:
   A: [1.5, 2]
   B: [2, 2.3]
   C: [2.3, 2.6]
-  F: [2.6, 3]
+  F: [2.6, 1.5]
+
+ Buccal_theshold:
+  A: [1.2, 1.5]
+  B: [1.5, 1.725]
+  C: [1.725, 1.95]
+  F: [1.95, 1.2]
+  
+ Lingual_theshold:
+  A: [1.2, 1.5]
+  B: [1.5, 1.725]
+  C: [1.725, 1.95]
+  F: [1.95, 1.2]
+  
+ Proximal_theshold:
+  A: [1.2, 1.5]
+  B: [1.5, 1.725]
+  C: [1.725, 1.95]
+  F: [1.95, 1.2]
+  
+ FinishingLineB_theshold:
+  A: [1.2, 1.5]
+  B: [1.5, 1.725]
+  C: [1.725, 1.95]
+  F: [1.95, 1.2]
+    
+ FinishingLineL-Distal_theshold:
+  A: [0.6, 1]
+  B: [1, 1.15]
+  C: [1.15, 1.3]
+  F: [1.3, 0.6]
+  
+ TOC_theshold:
+  A: [0, 10]
+  B: [10, 15]
+  C: [15, 20]
+  F: [20]
+
+ Header_Format:
+   - "ID"
+   - "Name"
+   - "OCC_score"
+   - "OCC_central-groove_grade"
+   - "OCC_B-func_grade"
+   - "OCC_L-incline of B cusp_grade"
+   - "OCC_L nonfunc_grade"
+   - "OCC_B incline of L cusp_grade"
+   - "Buccal_score"
+   - "Buccal_B plane1_grade"
+   - "Buccal_B plane2_grade"
+   - "Lingual_score"
+   - "Lingual_plane1"
+   - "Lingual_plane2"
+   - "Proximal_score"
+   - "Proximal_Mesial_grade"
+   - "Proximal_Distal_grade"
+   - "Finishing line_score"
+   - "Finishing line_B_grade"
+   - "Finishing line_L_grade"
+   - "Finishing line_Mesial_grade"
+   - "Finishing_Distal_grade"
+   - "TOC_score"
+   - "TOC_BL_grade"
+   - "TOC_MD_grade"
+   - "TOTAL"
