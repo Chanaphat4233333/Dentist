@@ -16,16 +16,14 @@ class Occ:
         self.filenameDB = filenameDB
 
         list_OCc = self.OccCalculator()
-        Grade_Occ_B, score_Occ_B = self.OccB_function(list_OCc)
-        Grade_Cental_groove, score_Cental_groove = self.OccCental_function(list_OCc)
-        Grade_L_of_B, score_L_of_B = self.OccLofB_function(list_OCc)
-        Grade_Lnon, score_Lnon = self.OccLnon_function(list_OCc)
-        Grade_BofL, score_BofL = self.OccBofL_function(list_OCc)
-        final_score = self.FinalScore(score_Occ_B, score_Cental_groove, score_L_of_B, score_Lnon, score_BofL)
+        self.Grade_Occ_B, self.score_Occ_B = self.OccB_function(list_OCc)
+        self.Grade_Cental_groove, self.score_Cental_groove = self.OccCental_function(list_OCc)
+        self.Grade_L_of_B, self.score_L_of_B = self.OccLofB_function(list_OCc)
+        self.Grade_Lnon, self.score_Lnon = self.OccLnon_function(list_OCc)
+        self.Grade_BofL, self.score_BofL = self.OccBofL_function(list_OCc)
+        self.final_score = self.FinalScore(self.score_Occ_B, self.score_Cental_groove, self.score_L_of_B, self.score_Lnon, self.score_BofL)
         # final_score, overallgrade = self.FinalScore(score_Occ_B, score_Cental_groove, score_L_of_B, score_Lnon, score_BofL)
         
-        self.WriteFileCsv(Grade_Occ_B, Grade_Cental_groove, Grade_L_of_B, Grade_Lnon, Grade_BofL, final_score)
-        self.WriteFileDB(Grade_Occ_B, Grade_Cental_groove, Grade_L_of_B, Grade_Lnon, Grade_BofL, final_score)
     def OccCalculator(self):
         OccB = self.Bfunc 
         OccLInclineOfB = self.L_of_B 
@@ -170,35 +168,4 @@ class Occ:
         # return final_score, overall_grade
         return final_score
 
-    def WriteFileCsv(self, Grade_Occ_B, Grade_Cental_groove, Grade_L_of_B, Grade_Lnon, Grade_BofL, final_score):
-        df = pd.read_csv("results/" + self.filename, encoding="utf-8-sig")
-        
-        df.at[self.fixatrow, "student_id"] = self.id
-        df.at[self.fixatrow, "name"] = self.name
-        df.at[self.fixatrow, "OCC_score"] = final_score
-        
-        df.at[self.fixatrow, "OCC_central-groove_grade"] = Grade_Cental_groove
-        df.at[self.fixatrow, "OCC_B-func_grade"] = Grade_Occ_B
-        df.at[self.fixatrow, "OCC_L-incline of B cusp_grade"] = Grade_L_of_B
-        df.at[self.fixatrow, "OCC_L nonfunc_grade"] = Grade_Lnon
-        df.at[self.fixatrow, "OCC_B incline of L cusp_grade"] = Grade_BofL
-        
-
-        df.to_csv("results/" + self.filename, index=False, encoding="utf-8-sig")
     
-    def WriteFileDB(self, Grade_Occ_B, Grade_Cental_groove, Grade_L_of_B, Grade_Lnon, Grade_BofL, final_score):
-        df_db = pd.read_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig")
-        
-        name_encrypt = encrypt_aes256(self.name, self.secretkey)
-        
-        df_db.at[self.fixatrow, "student_id"] = self.id
-        df_db.at[self.fixatrow, "name"] = name_encrypt.hex()
-        df_db.at[self.fixatrow, "OCC_score"] = final_score
-        
-        df_db.at[self.fixatrow, "OCC_central-groove_grade"] = Grade_Cental_groove
-        df_db.at[self.fixatrow, "OCC_B-func_grade"] = Grade_Occ_B
-        df_db.at[self.fixatrow, "OCC_L-incline of B cusp_grade"] = Grade_L_of_B
-        df_db.at[self.fixatrow, "OCC_L nonfunc_grade"] = Grade_Lnon
-        df_db.at[self.fixatrow, "OCC_B incline of L cusp_grade"] = Grade_BofL
-        
-        df_db.to_csv("results_encrypt/" + self.filenameDB , index=False, encoding="utf-8-sig")

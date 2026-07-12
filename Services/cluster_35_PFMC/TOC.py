@@ -10,6 +10,10 @@ class TOC:
         self.filename = filename
         self.filenameDB = filenameDB
         self.fixatrow = fixatrow
+        
+        self.score_MD, self.Grade_MD = self.MDCalculator()
+        self.score_BL, self.Grade_BL = self.BLCalculator()
+        self.final_score = self.Finalscore(self.score_MD, self.score_BL)
 
     def MDCalculator(self):
         IsUndercut = True
@@ -79,20 +83,6 @@ class TOC:
         final_score = score_MD + score_BL
         return final_score
     
-    def Writefile(self, Grade_MD, Grade_BL, final_score):
-        df = pd.read_csv("results/" + self.filename, encoding="utf-8-sig")
-        df.at[self.fixatrow, "TOC_score"] = final_score
-        df.at[self.fixatrow, "TOC_MD_grade"] = Grade_MD
-        df.at[self.fixatrow, "TOC_BL_grade"] = Grade_BL
-        df.to_csv("results/" + self.filename, encoding="utf-8-sig", index=False)
-
-        df_enc = pd.read_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig")
-        df_enc.at[self.fixatrow, "TOC_score"] = final_score
-        df_enc.at[self.fixatrow, "TOC_MD_grade"] = Grade_MD
-        df_enc.at[self.fixatrow, "TOC_BL_grade"] = Grade_BL
-        df_enc.to_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig", index=False)
-        
-        
-                
+    
             
             

@@ -10,12 +10,10 @@ class Buccal:
         self.fixatrow = fixatrow
         self.filenameDB = filenameDB
 
-        Grade_Buccal_Bplane1, score_Buccal_Bplane1 = self.Bplane1Calculator()
-        Grade_Buccal_Bplane2, score_Buccal_Bplane2 = self.Bplane2Calculator()
-        final_score = self.finalScore(score_Buccal_Bplane1, score_Buccal_Bplane2)
+        self.Grade_Buccal_Bplane1, self.score_Buccal_Bplane1 = self.Bplane1Calculator()
+        self.Grade_Buccal_Bplane2, self.score_Buccal_Bplane2 = self.Bplane2Calculator()
+        self.final_score = self.finalScore(self.score_Buccal_Bplane1, self.score_Buccal_Bplane2)
         
-        self.WriteFileCsv(Grade_Buccal_Bplane1, Grade_Buccal_Bplane2, final_score)
-        self.WriteFileDB(Grade_Buccal_Bplane1, Grade_Buccal_Bplane2, final_score)
 
     def Bplane1Calculator(self):
         grade = "N/A"
@@ -73,19 +71,6 @@ class Buccal:
 
         return final_score
 
-    def WriteFileCsv(self, Grade_Bplane1, Grade_Bplane2, finalscore):
-        df = pd.read_csv("results/" + self.filename, encoding="utf-8-sig")
-        df.at[self.fixatrow, "Buccal_score"] = finalscore
-        df.at[self.fixatrow, "Buccal_B plane1_grade"] = Grade_Bplane1
-        df.at[self.fixatrow, "Buccal_B plane2_grade"] = Grade_Bplane2
-        df.to_csv("results/" + self.filename, encoding="utf-8-sig", index=False)
-        
-    def WriteFileDB(self, Grade_Bplane1, Grade_Bplane2, finalscore):
-        df = pd.read_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig")
-        df.at[self.fixatrow, "Buccal_score"] = finalscore
-        df.at[self.fixatrow, "Buccal_B plane1_grade"] = Grade_Bplane1
-        df.at[self.fixatrow, "Buccal_B plane2_grade"] = Grade_Bplane2
-        df.to_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig", index=False)
         
         
         

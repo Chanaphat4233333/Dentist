@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from datetime import datetime
 from fastapi import FastAPI, HTTPException
+from pkg.crypto import encrypt_aes256
 import uvicorn
 from Services.cluster_35_PFMC.occ import Occ
 from Services.cluster_35_PFMC.buccal import Buccal
@@ -54,6 +55,8 @@ def cluster_35_PFMC(config, data, data_range):
     df_enc = pd.DataFrame(columns=file_header)
     df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
 
+    all_results = []
+    all_results_encrypt = []
     crypto_config = config['Encrypt']
     secretkey = crypto_config['secret']
     for i in range (data_range) :
@@ -117,15 +120,62 @@ def cluster_35_PFMC(config, data, data_range):
             fixatrow = i+1,
             filenameDB = file_name_db
         )
-        score_occ = OCC_method.Finalscore()
-        score_buccal = Buccal_method.Finalscore()
-        score_lingual = Lingual_method.Finalscore()
-        score_proximal = Proximal_method.Finalscore()
-        score_finishingline = Finishingline_method.Finalscore()
-        score_TOC = TOC_method.Finalscore()
 
-        print("score_occ-->", score_occ)
+        rowdata = {
+            'student_id': OCC_method.id,
+            'name': OCC_method.name,
+            'OCC_score': OCC_method.final_score,
+            'OCC_Grade': "",
+            'OCC_central-groove_grade': OCC_method.Grade_Cental_groove,
+            'OCC_B-func_grade': OCC_method.Grade_Occ_B,
+            'OCC_L-incline of B cusp_grade': OCC_method.Grade_L_of_B,
+            'OCC_L nonfunc_grade': OCC_method.Grade_Lnon,
+            'OCC_B incline of L cusp_grade': OCC_method.Grade_BofL,
+
+            'Buccal_score': Buccal_method.final_score,
+            'Buccal_Grade': "",
+            'Buccal_B plane1_grade': Buccal_method.Grade_Buccal_Bplane1,
+            'Buccal_B plane2_grade': Buccal_method.Grade_Buccal_Bplane2,
+
+            'Lingual_score': Lingual_method.final_score,
+            'Lingual_Grade': "",
+            'Lingual_plane1_grade': Lingual_method.Grade_Lplane1,
+            'Lingual_plane2_grade': Lingual_method.Grade_Lplane2,
+
+            'Proximal_score': Proximal_method.final_score,
+            'Proximal_Grade': "",
+            'Proximal_Mesial_grade': Proximal_method.Grade_Mesial,
+            'Proximal_Distal_grade': Proximal_method.Grade_Distal,
+
+            'FinishingLine_score': Finishingline_method.final_score,
+            'FinishingLine_Grade': "",
+            'FinishingLine_Buccal_grade': Finishingline_method.Grade_Buccal,
+            'FinishingLine_Lingual_grade': Finishingline_method.Grade_Lingual,
+            'FinishingLine_Mesial_grade': Finishingline_method.Grade_Mesial,
+            'FinishingLine_Distal_grade': Finishingline_method.Grade_Distal,
+
+            'TOC_score': TOC_method.final_score,
+            'TOC_Grade': "",
+            'TOC_BL_grade': TOC_method.Grade_BL,
+            'TOC_MD_grade': TOC_method.Grade_MD,
+
+            'TOTAL': OCC_method.final_score + Buccal_method.final_score + Lingual_method.final_score + Proximal_method.final_score + Finishingline_method.final_score + TOC_method.final_score,
+            'Grade_overall': "",
+
+        }
+        name_encrypt = encrypt_aes256(OCC_method.name, secretkey)
+        row_data_enc = rowdata.copy()
+        row_data_enc["name"] = name_encrypt.hex()
         
+        all_results.append(rowdata)
+        all_results_encrypt.append(row_data_enc)
+
+  
+    df = pd.DataFrame(all_results, columns=file_header)
+    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+    
+    df_enc = pd.DataFrame(all_results_encrypt, columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
 
 
     return file_path_result

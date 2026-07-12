@@ -9,10 +9,9 @@ class Proximal:
         self.filenameDB = filenameDB
         self.threshold = threshold
 
-        Grade_Mesial, score_Mesial = self.MesialCalculator()
-        Grade_Distal, score_Distal = self.DistalCalculator()
-        final_score = self.finalScore(score_Mesial, score_Distal)
-        self.Writefile(Grade_Mesial, Grade_Distal, final_score)
+        self.Grade_Mesial, self.score_Mesial = self.MesialCalculator()
+        self.Grade_Distal, self.score_Distal = self.DistalCalculator()
+        self.final_score = self.finalScore(self.score_Mesial, self.score_Distal)
     
     def MesialCalculator(self):
         Amin = self.threshold['A'][0]
@@ -66,15 +65,4 @@ class Proximal:
         final_score = score_Mesial + score_Distal
         return final_score
     
-    def Writefile(self, Grade_Mesial, Grade_Distal, finalscore):
-        df = pd.read_csv("results/" + self.filename, encoding="utf-8-sig")
-        df.at[self.fixatrow, "Proximal_score"] = finalscore
-        df.at[self.fixatrow, "Proximal_Mesial_grade"] = Grade_Mesial
-        df.at[self.fixatrow, "Proximal_Distal_grade"] = Grade_Distal
-        df.to_csv("results/" + self.filename, encoding="utf-8-sig", index=False)
-
-        df_enc = pd.read_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig")
-        df_enc.at[self.fixatrow, "Proximal_score"] = finalscore
-        df_enc.at[self.fixatrow, "Proximal_Mesial_grade"] = Grade_Mesial
-        df_enc.at[self.fixatrow, "Proximal_Distal_grade"] = Grade_Distal
-        df_enc.to_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig", index=False)
+   

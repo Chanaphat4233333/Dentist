@@ -8,10 +8,9 @@ class Lingual:
         self.fixatrow = fixatrow
         self.filenameDB = filenameDB  
 
-        Grade_Lplane1, score_Lplane1 = self.Lplane1Calculator()
-        Grade_Lplane2, score_Lplane2 = self.Lplane2Calculator()
-        final_score = self.finalScore(score_Lplane1, score_Lplane2)
-        self.Writefile(Grade_Lplane1, Grade_Lplane2, final_score)
+        self.Grade_Lplane1, self.score_Lplane1 = self.Lplane1Calculator()
+        self.Grade_Lplane2, self.score_Lplane2 = self.Lplane2Calculator()
+        self.final_score = self.finalScore(self.score_Lplane1, self.score_Lplane2)
 
     def Lplane1Calculator(self):
         Amin  = self.threshold['A'][1]
@@ -66,16 +65,4 @@ class Lingual:
         final_score = score_Lplane1 + score_Lplane2
         return final_score
 
-    def Writefile(self, Grade_Lplane1, Grade_Lplane2, finalscore):
-        df = pd.read_csv("results/" + self.filename, encoding="utf-8-sig")
-        df.at[self.fixatrow, "Lingual_score"] = finalscore
-        df.at[self.fixatrow, "Lingual_plane1_grade"] = Grade_Lplane1
-        df.at[self.fixatrow, "Lingual_plane2_grade"] = Grade_Lplane2
-        df.to_csv("results/" + self.filename, encoding="utf-8-sig", index=False)
-
-        df_enc = pd.read_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig")
-        df_enc.at[self.fixatrow, "Lingual_score"] = finalscore
-        df_enc.at[self.fixatrow, "Lingual_plane1_grade"] = Grade_Lplane1
-        df_enc.at[self.fixatrow, "Lingual_plane2_grade"] = Grade_Lplane2
-        df_enc.to_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig", index=False)
-        
+    

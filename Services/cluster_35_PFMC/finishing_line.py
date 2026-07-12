@@ -11,12 +11,11 @@ class FinishingLine:
         self.filenameDB = filenameDB
         self.fixatrow = fixatrow
 
-        Grade_Buccal, score_Buccal = self.BuccalCalculator()
-        Grade_Lingual, score_Lingual = self.LingualCalculator()
-        Grade_Mesial, score_Mesial = self.MesialCalculator()
-        Grade_Distal, score_Distal = self.DistalCalculator()
-        final_score = self.Finalscore(score_Buccal, score_Lingual, score_Mesial, score_Distal)
-        self.Writefile(Grade_Buccal, Grade_Lingual, Grade_Mesial, Grade_Distal, final_score)
+        self.Grade_Buccal, self.score_Buccal = self.BuccalCalculator()
+        self.Grade_Lingual, self.score_Lingual = self.LingualCalculator()
+        self.Grade_Mesial, self.score_Mesial = self.MesialCalculator()
+        self.Grade_Distal, self.score_Distal = self.DistalCalculator()
+        self.final_score = self.Finalscore(self.score_Buccal, self.score_Lingual, self.score_Mesial, self.score_Distal)
 
     def BuccalCalculator(self):
         Amin = float(self.BTheshold['A'][0])
@@ -120,22 +119,7 @@ class FinishingLine:
         return final_score
 
     
-    def Writefile(self, Grade_Buccal, Grade_Lingual, Grade_Mesial, Grade_Distal, final_score):
-        df = pd.read_csv("results/" + self.filename, encoding="utf-8-sig")
-        df.at[self.fixatrow, "FinishingLine_score"] = final_score
-        df.at[self.fixatrow, "FinishingLine_Buccal_grade"] = Grade_Buccal
-        df.at[self.fixatrow, "FinishingLine_Lingual_grade"] = Grade_Lingual
-        df.at[self.fixatrow, "FinishingLine_Mesial_grade"] = Grade_Mesial
-        df.at[self.fixatrow, "FinishingLine_Distal_grade"] = Grade_Distal
-        df.to_csv("results/" + self.filename, encoding="utf-8-sig", index=False)
-
-        df_enc = pd.read_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig")
-        df_enc.at[self.fixatrow, "FinishingLine_score"] = final_score
-        df_enc.at[self.fixatrow, "FinishingLine_Buccal_grade"] = Grade_Buccal
-        df_enc.at[self.fixatrow, "FinishingLine_Lingual_grade"] = Grade_Lingual
-        df_enc.at[self.fixatrow, "FinishingLine_Mesial_grade"] = Grade_Mesial
-        df_enc.at[self.fixatrow, "FinishingLine_Distal_grade"] = Grade_Distal
-        df_enc.to_csv("results_encrypt/" + self.filenameDB, encoding="utf-8-sig", index=False)
+   
         
         
     
