@@ -22,8 +22,6 @@ class TOC:
         Bmin = float(self.threshold['B'][0])
         Cmax = float(self.threshold['C'][1])
         Cmin = float(self.threshold['C'][0])
-        Fmax = float(self.threshold['F'][1])
-        Fmin = float(self.threshold['F'][0])
         Grade_MD = "N/A"
         score_MD = 0
         if not IsUndercut:
@@ -56,8 +54,6 @@ class TOC:
         Bmin = float(self.threshold['B'][0])
         Cmax = float(self.threshold['C'][1])
         Cmin = float(self.threshold['C'][0])
-        Fmax = float(self.threshold['F'][1])
-        Fmin = float(self.threshold['F'][0])
         Grade_BL = "N/A"
         score_BL = 0
         if not IsUndercut:

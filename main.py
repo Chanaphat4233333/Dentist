@@ -29,7 +29,7 @@ def cluster_35_PFMC(config, data, data_range):
     Buccal_theshold = config35PFMC['Buccal_theshold']
     Lingual_theshold = config35PFMC['Lingual_theshold']
     Proximal_theshold = config35PFMC['Proximal_theshold']
-    FinishinglineB_theshold = config35PFMC['FinishinglineB_theshold']
+    FinishinglineB_theshold = config35PFMC['FinishingLineB_theshold']
     FinishinglineL_theshold = config35PFMC['FinishingLineL-Distal_theshold']
     TOC_theshold = config35PFMC['TOC_theshold']
 
@@ -100,7 +100,7 @@ def cluster_35_PFMC(config, data, data_range):
             Buccal = float(data.iloc[i+2,14]),
             Lingual = float(data.iloc[i+2,15]),
             Mesial = float(data.iloc[i+2, 16]),
-            Distal = float(data.iloc[i+2, 17])
+            Distal = float(data.iloc[i+2, 17]),
             BTheshold = FinishinglineB_theshold,
             LTheshold = FinishinglineL_theshold,
             filename = file_name,
@@ -109,9 +109,9 @@ def cluster_35_PFMC(config, data, data_range):
         )
         TOC_method = TOC(
             MD = float(data.iloc[i+2, 18]),
-            UndercutMD = float(data.iloc[i+2, 19]),
+            UndercutMD = str(data.iloc[i+2, 19]),
             BL = float(data.iloc[i+2, 20]),
-            UndercutBL = float(data.iloc[i+2, 21]),
+            UndercutBL = str(data.iloc[i+2, 21]),
             threshold = TOC_theshold,
             filename = file_name,
             fixatrow = i+1,
