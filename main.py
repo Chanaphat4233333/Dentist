@@ -219,9 +219,13 @@ def cluster_11_lithium(config, data, data_range):
     
     all_results = []
     all_results_encrypt = []
+    
     crypto_config = config['Encrypt']
     secretkey = crypto_config['secret']
-    
+    gradeA = 0
+    gradeB = 0
+    gradeC = 0
+    gradeF = 0
     for i in range(data_range):
         Incisal_method = Incisal(
             incisal = float(data.iloc[i+2,2]),
@@ -257,23 +261,32 @@ def cluster_11_lithium(config, data, data_range):
             threshold = toc_threshold
         )
         final_grade = "N/A"
+        
         issue =""
         undercut = str(data.iloc[i+2,15])
-        if undercut == "yes":
-            final_grade = "F"
-            issue = "undercut existed"
+        
             
         
         finalscore = Incisal_method.final_score + buccal_method.final_score + lingual_method.final_score + proximal_method.final_score + finishing_line_method.final_score + toc_method.final_score
-        
-        if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
-            final_grade = "A"
-        elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
-            final_grade = "B"
-        elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
-            final_grade = "C"
-        elif finalscore <= final_score['F'][0]:
+        if undercut == "no":
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                final_grade = "A"
+                gradeA +=1
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                final_grade = "B"
+                gradeB +=1
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                final_grade = "C"
+                gradeC +=1
+            else:
+                gradeF +=1
+                final_grade = "F"
+        else:
+            gradeF +=1
+            issue = "undercut"
             final_grade = "F"
+            
+        
         rowdata = {
             "student_id": str(data.iloc[i+2,0]),
             "name": str(data.iloc[i+2,1]),
@@ -301,14 +314,28 @@ def cluster_11_lithium(config, data, data_range):
             "issue":issue
             
         }
+        
         name_encrypt = encrypt_aes256(rowdata["name"], secretkey)
         row_data_enc = rowdata.copy()
         row_data_enc["name"] = name_encrypt.hex()
         
         all_results.append(rowdata)
         all_results_encrypt.append(row_data_enc)
+    
+    
+    
     df = pd.DataFrame(all_results, columns=file_header)
-    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+    totalstudent = len(all_results)
+
+    summary_data = {
+        "Summary": ["total", "A", "B", "C", "F"], 
+        "Count": [totalstudent, gradeA, gradeB, gradeC, gradeF],
+    }
+    count_score_df = pd.DataFrame(summary_data)
+
+
+    final_df = pd.concat([df, count_score_df], axis=1)
+    final_df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
         
     df_enc = pd.DataFrame(all_results_encrypt, columns=file_header)
     df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
