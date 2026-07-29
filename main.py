@@ -257,9 +257,12 @@ def cluster_11_lithium(config, data, data_range):
             threshold = toc_threshold
         )
         final_grade = "N/A"
+        issue =""
         undercut = str(data.iloc[i+2,15])
         if undercut == "yes":
             final_grade = "F"
+            issue = "undercut existed"
+            
         
         finalscore = Incisal_method.final_score + buccal_method.final_score + lingual_method.final_score + proximal_method.final_score + finishing_line_method.final_score + toc_method.final_score
         
@@ -294,7 +297,8 @@ def cluster_11_lithium(config, data, data_range):
             "finishing_line_distal_garde": finishing_line_method.distal_grade,
             "toc_score": toc_method.final_score,
             "toc_bl_grade": toc_method.bl_garde,
-            "toc_md_grade": toc_method.md_garde
+            "toc_md_grade": toc_method.md_garde,
+            "issue":issue
             
         }
         name_encrypt = encrypt_aes256(rowdata["name"], secretkey)
