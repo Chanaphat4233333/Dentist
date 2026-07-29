@@ -80,6 +80,67 @@ cluster_35_PFMC:
    - "TOTAL"
    - "Grade_overall"
 
+cluster_11_lithium:
+   incisal_edge :
+    A : [1.5,2]
+    B : [2, 2.3]
+    C :  [2.3,2.6]
+   
+   Buccal:
+    A: [1,1.5]
+    B: [1.5,1.725]
+    C: [1.725,1.95]
+   
+   Lingual:
+    A : [1,1.5]
+    B : [1.5,1.725]
+    C : [1.725, 1.95]
+   
+   Proximal:
+    A: [0.5,1]
+    B: [1,1.15]
+    C: [1.15,1.3]
+
+   Finishing_line :
+    A: [0.5,1]
+    B: [1,1.15]
+    C: [1.15, 1.3]
+
+   TOC:
+    A : [0,10]
+    B: [10,15]
+    C: [15,20]
+   
+   Final_score:
+    A: [300,360]
+    B : [240,300]
+    C: [216,240]
+    F : [216]
+   
+   Header_Format:
+   - "student_id"
+   - "name"
+   - "total_score"
+   - "final_garde"
+   - "incisal_score"
+   - "incisal_grade"
+   - "buccal_score"
+   - "buccal_BP1_grade"
+   - "buccal_BP2_grade"
+   - "ligual_score"
+   - "ligual_LP1_grade"
+   - "ligual_LP2_grade"
+   - "proximal_score"
+   - "proximal_mesial_garde"
+   - "proximal_distal_garde"
+   - "finishing_line_score"
+   - "finishing_line_B_garde"
+   - "finishing_line_L_garde"
+   - "finishing_line_mesial_garde"
+   - "finishing_line_distal_garde"
+   - "toc_score"
+   - "toc_bl_grade"
+   - "toc_md_grade"
 
 Encrypt:
    secret: c5b91e484e3b3efa6f769b39a3bb2cc3

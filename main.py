@@ -12,6 +12,12 @@ from Services.cluster_35_PFMC.proximal import Proximal
 from Services.cluster_35_PFMC.finishing_line import FinishingLine
 from Services.cluster_35_PFMC.TOC import TOC
 
+from Services.cluster_11_lithium.incisal import Incisal
+from Services.cluster_11_lithium.buccal import Buccal_11
+from Services.cluster_11_lithium.lingual import Lingual_11
+from Services.cluster_11_lithium.proximal import Proximal_11
+from Services.cluster_11_lithium.finishing_line import FinishingLine_11
+from Services.cluster_11_lithium.toc import Toc_11
 
 def loadConfig():
     with open("config.yml", "r", encoding="utf-8") as file:
@@ -179,18 +185,155 @@ def cluster_35_PFMC(config, data, data_range):
 
 
     return file_path_result
+
+def cluster_11_lithium(config, data, data_range):
+    config_11_lithium = config['cluster_11_lithium']
+    incisal_edge_threshold = config_11_lithium['incisal_edge']
+    buccal_threshold = config_11_lithium['Buccal']
+    lingual_threshold = config_11_lithium['Lingual']
+    proximal_threshold = config_11_lithium['Proximal']
+    finishing_line_threshold = config_11_lithium['Finishing_line']
+    toc_threshold = config_11_lithium['TOC']
+    final_score = config_11_lithium['Final_score']
     
+    time_stamp = datetime.now().strftime("%Y-%m-%d")
+    file_name = f"cluster_11_lithium_{time_stamp}.csv"
+    file_name_db = f"cluster_11_lithium_{time_stamp}_encrypt.csv"
+    
+    file_header = config_11_lithium['Header_Format']
+    folder_name_result = "results"
+    folder_name_encrypt = "results_encrypt"
+    
+    if not os.path.exists(folder_name_result):
+        os.makedirs(folder_name_result)
+    if not os.path.exists(folder_name_encrypt):
+        os.makedirs(folder_name_encrypt)
+    
+    file_path_result = os.path.join(folder_name_result, file_name)
+    file_path_encrypt = os.path.join(folder_name_encrypt, file_name_db)
+    df = pd.DataFrame(columns=file_header)
+    
+    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+    df_enc = pd.DataFrame(columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+    
+    all_results = []
+    all_results_encrypt = []
+    crypto_config = config['Encrypt']
+    secretkey = crypto_config['secret']
+    
+    for i in range(data_range):
+        Incisal_method = Incisal(
+            incisal = float(data.iloc[i+2,2]),
+            threshold = incisal_edge_threshold
+            )
+        
+        buccal_method = Buccal_11(
+            md1 = float(data.iloc[i+2,3]),
+            md2 = float(data.iloc[i+2,4]),
+            threshold = buccal_threshold
+        )
+        
+        lingual_method = Lingual_11(
+            L1 = float(data.iloc[i+2,5]),
+            L2 = float(data.iloc[i+2,6]),
+            threshold = lingual_threshold
+        )
+        proximal_method = Proximal_11(
+            mesial = float(data.iloc[i+2,7]),
+            distal = float(data.iloc[i+2,8]),
+            threshold = proximal_threshold
+        )
+        finishing_line_method = FinishingLine_11(
+            b = float(data.iloc[i+2,9]),
+            l = float(data.iloc[i+2,10]),
+            mesial = float(data.iloc[i+2,11]),
+            distal = float(data.iloc[i+2,12]),
+            threshold = finishing_line_threshold
+        )
+        toc_method = Toc_11(
+            bl = float(data.iloc[i+2,13]),
+            md = float(data.iloc[i+2,14]),
+            threshold = toc_threshold
+        )
+        final_grade = "N/A"
+        undercut = str(data.iloc[i+2,15])
+        if undercut == "yes":
+            final_grade = "F"
+        
+        finalscore = Incisal_method.final_score + buccal_method.final_score + lingual_method.final_score + proximal_method.final_score + finishing_line_method.final_score + toc_method.final_score
+        
+        if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+            final_grade = "A"
+        elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+            final_grade = "B"
+        elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+            final_grade = "C"
+        elif finalscore <= final_score['F'][0]:
+            final_grade = "F"
+        rowdata = {
+            "student_id": str(data.iloc[i+2,0]),
+            "name": str(data.iloc[i+2,1]),
+            "total_score": finalscore,
+            "final_garde": final_grade,
+            "incisal_score": Incisal_method.final_score,
+            "incisal_grade": Incisal_method.incisal_grade,
+            "buccal_score" : buccal_method.final_score,
+            "buccal_BP1_grade": buccal_method.Grade_md1,
+            "buccal_BP2_grade": buccal_method.Grade_md2,
+            "ligual_score" : lingual_method.final_score,
+            "ligual_LP1_grade": lingual_method.L1_grade,
+            "ligual_LP2_grade": lingual_method.L2_grade,
+            "proximal_score": proximal_method.final_score,
+            "proximal_mesial_garde": proximal_method.mesial_grade,
+            "proximal_distal_garde": proximal_method.distal_grade,
+            "finishing_line_score": finishing_line_method.final_score,
+            "finishing_line_B_garde": finishing_line_method.b_grade,
+            "finishing_line_L_garde": finishing_line_method.l_grade,
+            "finishing_line_mesial_garde": finishing_line_method.mesial_grade,
+            "finishing_line_distal_garde": finishing_line_method.distal_grade,
+            "toc_score": toc_method.final_score,
+            "toc_bl_grade": toc_method.bl_garde,
+            "toc_md_grade": toc_method.md_garde
+            
+        }
+        name_encrypt = encrypt_aes256(rowdata["name"], secretkey)
+        row_data_enc = rowdata.copy()
+        row_data_enc["name"] = name_encrypt.hex()
+        
+        all_results.append(rowdata)
+        all_results_encrypt.append(row_data_enc)
+    df = pd.DataFrame(all_results, columns=file_header)
+    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+        
+    df_enc = pd.DataFrame(all_results_encrypt, columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+    
+    
+    return file_path_result
+        
+        
+        
+        
+        
 
 app = FastAPI()
 
-@app.get("/api/v1/data-path/{file_path:path}")
-def get_cluster_data(file_path: str):
+@app.get("/api/v1/data-path/{type:str}/{file_path:path}")
+def get_cluster_data(type: str, file_path: str):
     try:
         config = loadConfig()
 
         data, data_range = loadDataSet(file_path)
 
-        calculation_results = cluster_35_PFMC(config, data, data_range)
+        if type == '35_PFMC':
+            calculation_results = cluster_35_PFMC(config, data, data_range)
+        elif type == '11_lithium':
+            calculation_results = cluster_11_lithium(config, data, data_range)
+        else:
+            raise HTTPException(
+                status_code=400, detail=f"invalid type: {type}"
+            )
 
         return {
             "status": "success",
