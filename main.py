@@ -19,6 +19,14 @@ from Services.cluster_11_lithium.proximal import Proximal_11
 from Services.cluster_11_lithium.finishing_line import FinishingLine_11
 from Services.cluster_11_lithium.toc import Toc_11
 
+from Services.cluster_16_PFMC.occ import OCC_16PFMC
+from Services.cluster_16_PFMC.buccal import Buccal_16PFMC
+from Services.cluster_16_PFMC.lingual import Lingual_16PFMC
+from Services.cluster_16_PFMC.proximal import Proximal_16PFMC
+from Services.cluster_16_PFMC.finishing_line import Finishing_line_16PFMC
+from Services.cluster_16_PFMC.toc import TOC_16PFMC
+
+
 def loadConfig():
     with open("config.yml", "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
@@ -342,6 +350,192 @@ def cluster_11_lithium(config, data, data_range):
     
     
     return file_path_result
+
+def cluster_16_PFMC(config, data, data_range):
+    config_16_PFMC = config['cluster_16_PFMC']
+    occ_16PFMC_threshold = config_16_PFMC['occ_16PFMC']
+    buccal_16PFMC_threshold = config_16_PFMC['buccal_16PFMC']
+    lingual_16PFMC_threshold = config_16_PFMC['lingual_16PFMC']
+    proximal_16PFMC_threshold = config_16_PFMC['proximal_16PFMC']
+    finishingline1_threshold = config_16_PFMC['finishing_line_MDandDB']
+    finishingline2_threshold = config_16_PFMC['finishing_line_ML-DL']
+    toc_16PFMC_threshold = config_16_PFMC['toc_16PFMC']
+    final_score = config_16_PFMC['Final_score']
+
+    time_stamp = datetime.now().strftime("%Y-%m-%d")
+    file_name = f"cluster_16_PFMC_{time_stamp}.csv"
+    file_name_db = f"cluster_16_PFMC_{time_stamp}_encrypt.csv"
+        
+    file_header = config_16_PFMC['Header_Format']
+    folder_name_result = "results"
+    folder_name_encrypt = "results_encrypt"
+
+    if not os.path.exists(folder_name_result):
+        os.makedirs(folder_name_result)
+    if not os.path.exists(folder_name_encrypt):
+        os.makedirs(folder_name_encrypt)
+        
+    file_path_result = os.path.join(folder_name_result, file_name)
+    file_path_encrypt = os.path.join(folder_name_encrypt, file_name_db)
+    df = pd.DataFrame(columns=file_header)
+        
+    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+    df_enc = pd.DataFrame(columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+        
+    all_results = []
+    all_results_encrypt = []
+        
+    crypto_config = config['Encrypt']
+    secretkey = crypto_config['secret']
+    gradeA = 0
+    gradeB = 0
+    gradeC = 0
+    gradeF = 0
+
+    # for i in range(data_range):
+    
+    for i in range(data_range):
+        occ_16PFMC = OCC_16PFMC(
+            mb_cusp = float(data.iloc[i+2,3]),
+            mb_incline = float(data.iloc[i+2,4]),
+            mb_groove = float(data.iloc[i+2,5]),
+            ml_cusp = float(data.iloc[i+2,6]),
+            ml_incline = float(data.iloc[i+2,7]),
+            ml_groove = float(data.iloc[i+2,8]),
+            db_cusp = float(data.iloc[i+2,9]),
+            db_incline = float(data.iloc[i+2,10]),
+            db_groove = float(data.iloc[i+2,11]),
+            dl_cusp = float(data.iloc[i+2,12]),
+            dl_incline = float(data.iloc[i+2,13]),
+            dl_groove = float(data.iloc[i+2,14]),
+            threshold = occ_16PFMC_threshold
+        )
+        buccal_16PFMC = Buccal_16PFMC(
+            mbp1 = float(data.iloc[i+2,15]),
+            mbp2 = float(data.iloc[i+2,16]),
+            dbp1 = float(data.iloc[i+2,17]),
+            dbp2 = float(data.iloc[i+2,18]),
+            threshold = buccal_16PFMC_threshold
+        )
+        lingual_16PFMC =Lingual_16PFMC(
+            mlp1 = float(data.iloc[i+2,19]),
+            mlp2 = float(data.iloc[i+2,20]),
+            dlp1 = float(data.iloc[i+2,21]),
+            dlp2 = float(data.iloc[i+2,22]),
+            threshold = lingual_16PFMC_threshold
+        )
+        proximal_16PFMC = Proximal_16PFMC(
+            mesial = float(data.iloc[i+2,23]),
+            distal = float(data.iloc[i+2,24]),
+            threshold = proximal_16PFMC_threshold
+        )
+        finishing_line_16PFMC = Finishing_line_16PFMC(
+            mb = float(data.iloc[i+2,25]),
+            ml = float(data.iloc[i+2,26]),
+            db = float(data.iloc[i+2,27]),
+            dl = float(data.iloc[i+2,28]),
+            mesial = float(data.iloc[i+2,29]),
+            distal = float(data.iloc[i+2,30]),
+            threshold1 = finishingline1_threshold,
+            threshold2 = finishingline2_threshold
+        )
+        toc_16PFMC = TOC_16PFMC(
+            md = float(data.iloc[i+2,31]),
+            bl = float(data.iloc[i+2,32]),
+            threshold = toc_16PFMC_threshold
+        )
+        final_grade = "N/A"
+        issue =""
+        undercut = str(data.iloc[i+2,33])
+        finalscore = occ_16PFMC.final_score + buccal_16PFMC.final_score + lingual_16PFMC.final_score + proximal_16PFMC.final_score + finishing_line_16PFMC.final_score + toc_16PFMC.final_score
+        if undercut == "no":
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                final_grade = "A"
+                gradeA +=1
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                final_grade = "B"
+                gradeB +=1
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                final_grade = "C"
+                gradeC +=1
+            else:
+                gradeF +=1
+                final_grade = "F"
+        else:
+            gradeF +=1
+            issue = "undercut"
+            final_grade = "F"
+        
+        rowdata = {
+            "student_id": str(data.iloc[i+2,0]),
+            "name": str(data.iloc[i+2,2]),
+            "total_score": finalscore,
+            "final_garde": final_grade,
+            "OCC_score": Incisal_method.final_score,
+            "OCC_MB_cusp_grade": Incisal_method.incisal_grade,
+            "OCC_MB_incline_grade" : buccal_method.final_score,
+            "OCC_MB_groove_grade": buccal_method.Grade_md1,
+            "OCC_DB_cusp_grade": buccal_method.Grade_md2,
+            "OCC_DB_incline_grade" : lingual_method.final_score,
+            "OCC_DB_groove_grade": lingual_method.L1_grade,
+            "OCC_ML_cusp_grade": lingual_method.L2_grade,
+            "OCC_ML_incline_grade": proximal_method.final_score,
+            "OCC_ML_groove_grade": proximal_method.mesial_grade,
+            "OCC_DL_cusp_grade": proximal_method.distal_grade,
+            "OCC_DL_incline_grade": finishing_line_method.final_score,
+            "OCC_DL_groove_grade": finishing_line_method.b_grade,
+            "Buccal_score": finishing_line_method.l_grade,
+            "Buccal_MBP1_grade": finishing_line_method.mesial_grade,
+            "Buccal_MBP2_grade": finishing_line_method.distal_grade,
+            "Buccal_DBP1_grade": toc_method.final_score,
+            "Buccal_DBP2_grade": toc_method.bl_garde,
+            "Lingual_score": toc_method.md_garde,
+            "Lingual_MLP1_grade":issue,
+            "Lingual_MLP2_grade":issue,
+            "Lingual_DLP1_grade":issue,
+            "Lingual_DLP2_grade":issue,
+            "Proximal_score": proximal_method.final_score,
+            "Proximal_mesial_grade": proximal_method.mesial_grade,
+            "Proximal_distal_grade": proximal_method.distal_grade,
+            "Finishing_line_score": finishing_line_method.final_score,
+            "Finishing_line_MB_grade": finishing_line_method.b_grade,
+            "Finishing_line_ML_grade": finishing_line_method.l_grade,
+            "Finishing_line_DB_grade": finishing_line_method.mesial_grade,
+            "Finishing_line_DL_grade": finishing_line_method.distal_grade,
+            "Finishing_line_mesial_grade": finishing_line_method.mesial_grade,
+            "Finishing_line_distal_grade": finishing_line_method.distal_grade,
+            "TOC_score": toc_method.final_score,
+            "TOC_MD_grade": toc_method.md_garde,
+            "TOC_BL_grade": toc_method.bl_garde,
+            "issue":issue
+        }
+                
+        name_encrypt = encrypt_aes256(rowdata["name"], secretkey)
+        row_data_enc = rowdata.copy()
+        row_data_enc["name"] = name_encrypt.hex()
+                
+        all_results.append(rowdata)
+        all_results_encrypt.append(row_data_enc)
+    
+    df = pd.DataFrame(all_results, columns=file_header)
+    totalstudent = len(all_results)
+        
+    summary_data = {
+        "Summary": ["total", "A", "B", "C", "F"], 
+        "Count": [totalstudent, gradeA, gradeB, gradeC, gradeF],
+            }
+    count_score_df = pd.DataFrame(summary_data)
+        
+        
+    final_df = pd.concat([df, count_score_df], axis=1)
+    final_df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+                
+    df_enc = pd.DataFrame(all_results_encrypt, columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+    
+    return file_path_result
+            
         
         
         
@@ -361,6 +555,8 @@ def get_cluster_data(type: str, file_path: str):
             calculation_results = cluster_35_PFMC(config, data, data_range)
         elif type == '11_lithium':
             calculation_results = cluster_11_lithium(config, data, data_range)
+        elif type == '16_PFMC':
+            calculation_results = cluster_16_PFMC(config, data, data_range)
         else:
             raise HTTPException(
                 status_code=400, detail=f"invalid type: {type}"

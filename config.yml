@@ -97,9 +97,9 @@ cluster_11_lithium:
     C : [1.725, 1.95]
    
    Proximal:
-    A: [0.5,1]
-    B: [1,1.15]
-    C: [1.15,1.3]
+    A: [1.1,1.5]
+    B: [1.5,1.725]
+    C: [1.725,1.95]
 
    Finishing_line :
     A: [0.5,1]
@@ -143,6 +143,88 @@ cluster_11_lithium:
    - "toc_md_grade"
    - "issue"
    
+cluster_16_PFMC:
+   occ_16PFMC:
+      A: [1.5,2]
+      B: [2,2.3]
+      C: [2.3,2.6]
+
+   buccal_16PFMC:
+      A: [1.2,1.5]
+      B: [1.5,1.725]
+      C: [1.725,1.95]
+
+   lingual_16PFMC:
+      A: [1,1.5]
+      B: [1.5,1.725]
+      C: [1.725, 1.95]
+
+   proximal_16PFMC:
+      A: [1,1.5]
+      B: [1.5, 1.725]
+      C: [1.725, 1.95]
+
+   finishing_line_MDandDB:
+      A: [1.2,1.5]
+      B: [1.5,1.725]
+      C: [1.725, 1.95]
+
+   finishing_line_ML-DL:
+      A: [0.6,1]
+      B: [1,1.15]
+      C: [1.15, 1.3]
+
+   toc_16PFMC:
+      A: [0,10]
+      B: [10,15]
+      C: [15,20]
+   Final_score:
+    A: [300,360]
+    B : [240,300]
+    C: [216,240]
+    F : [216]
+   Header_Format:
+   - "student_id"
+   - "name"
+   - "total_score"
+   - "final_garde"
+   - "OCC_score"
+   - "OCC_MB_cusp_grade"
+   - "OCC_MB_incline_grade"
+   - "OCC_MB_groove_grade"
+   - "OCC_DB_cusp_grade"
+   - "OCC_DB_incline_grade"
+   - "OCC_DB_groove_grade"
+   - "OCC_ML_cusp_grade"
+   - "OCC_ML_incline_grade"
+   - "OCC_ML_groove_grade"
+   - "OCC_DL_cusp_grade"
+   - "OCC_DL_incline_grade"
+   - "OCC_DL_groove_grade"
+   - "Buccal_score"
+   - "Buccal_MBP1_grade"
+   - "Buccal_MBP2_grade"
+   - "Buccal_DBP1_grade"
+   - "Buccal_DBP2_grade"
+   - "Lingual_score"
+   - "Lingual_MLP1_grade"
+   - "Lingual_MLP2_grade"
+   - "Lingual_DLP1_grade"
+   - "Lingual_DLP2_grade"
+   - "Proximal_score"
+   - "Proximal_mesial_grade"
+   - "Proximal_distal_grade"
+   - "Finishing_line_score"
+   - "Finishing_line_MB_grade"
+   - "Finishing_line_ML_grade"
+   - "Finishing_line_DB_grade"
+   - "Finishing_line_DL_grade"
+   - "Finishing_line_mesial_grade"
+   - "Finishing_line_distal_grade"
+   - "TOC_score"
+   - "TOC_MD_grade"
+   - "TOC_BL_grade"
+   - "issue"
 
 Encrypt:
    secret: c5b91e484e3b3efa6f769b39a3bb2cc3
