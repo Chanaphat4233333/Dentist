@@ -5,24 +5,30 @@ class Buccal_16PFMC:
         self.dbp1 = dbp1
         self.dbp2 = dbp2
         self.threshold = threshold
-        
         if self.mbp1 == 0:
             self.mbp1_grade, self.mbp1_score = self.mbp1_calculator()
+            self.mbp2_grade = self.mbp1_grade
+            self.mbp2_score = 0
         elif self.mbp2 == 0:
             self.mbp2_grade, self.mbp2_score = self.mbp2_calculator()
+            self.mbp1_grade = self.mbp2_grade
+            self.mbp1_score = 0
         else:
             self.mbp1_grade, self.mbp1_score = self.mbp1_calculator()
             self.mbp2_grade, self.mbp2_score = self.mbp2_calculator()
             
-        if self.dbp1 ==0:
+        if self.dbp1 == 0:
             self.dbp1_grade, self.dbp1_score = self.dbp1_calculator()
-        elif self.dbp2 ==0:
+            self.dbp2_grade = self.dbp1_grade
+            self.dbp2_score = 0
+        elif self.dbp2 == 0:
             self.dbp2_grade, self.dbp2_score = self.dbp2_calculator()
+            self.dbp1_grade = self.dbp2_grade
+            self.dbp1_score = 0
         else:
             self.dbp1_grade, self.dbp1_score = self.dbp1_calculator()
             self.dbp2_grade, self.dbp2_score = self.dbp2_calculator()
             
-        
         self.final_score = self.finalscore(self.mbp1_score, self.mbp2_score, self.dbp1_score, self.dbp2_score)
     
     def mbp1_calculator(self):
@@ -95,8 +101,10 @@ class Buccal_16PFMC:
     
     def dbp1_calculator(self):
         threshold = self.threshold
+        mutiscore = 1
         if self.dbp1 == 0:
             self.dbp1 = self.dbp2
+            mutiscore = 2
         
         Amin = threshold['A'][0]
         Amax = threshold['A'][1]
@@ -121,12 +129,14 @@ class Buccal_16PFMC:
             dbp1_grade = "F"
             dbp1_score = 4.5
         
-        return dbp1_grade, dbp1_score
+        return dbp1_grade, dbp1_score * mutiscore
     
     def dbp2_calculator(self):
         threshold = self.threshold
+        mutiscore = 1
         if self.dbp2 == 0:
             self.dbp2 = self.dbp1   
+            mutiscore = 2
         Amin = threshold['A'][0]
         Amax = threshold['A'][1]
         Bmin = threshold['B'][0]
@@ -150,7 +160,7 @@ class Buccal_16PFMC:
             dbp2_grade = "F"
             dbp2_score = 4.5
         
-        return dbp2_grade, dbp2_score
+        return dbp2_grade, dbp2_score * mutiscore
     
     def finalscore(self, mbp1_score, mbp2_score, dbp1_score, dbp2_score):
         finalscore = mbp1_score + mbp2_score + dbp1_score + dbp2_score

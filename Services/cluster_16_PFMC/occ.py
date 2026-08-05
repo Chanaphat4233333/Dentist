@@ -36,12 +36,12 @@ class OCC_16PFMC:
         groove_score = 0
 
 
-        Amin  = threshold['A'][1]
-        Amax = threshold['A'][0]
-        Bmin = threshold['B'][1]
-        Bmax = threshold['B'][0]
-        Cmin = threshold['C'][1]
-        Cmax = threshold['C'][0]
+        Amin  = threshold['A'][0]
+        Amax = threshold['A'][1]
+        Bmin = threshold['B'][0]
+        Bmax = threshold['B'][1]
+        Cmin = threshold['C'][0]
+        Cmax = threshold['C'][1]
 
         cusp_grade = "N/A"
         incline_grade = "N/A"
@@ -102,12 +102,12 @@ class OCC_16PFMC:
         groove_score = 0
     
     
-        Amin  = threshold['A'][1]
-        Amax = threshold['A'][0]
-        Bmin = threshold['B'][1]
-        Bmax = threshold['B'][0]
-        Cmin = threshold['C'][1]
-        Cmax = threshold['C'][0]
+        Amin  = threshold['A'][0]
+        Amax = threshold['A'][1]
+        Bmin = threshold['B'][0]
+        Bmax = threshold['B'][1]
+        Cmin = threshold['C'][0]
+        Cmax = threshold['C'][1]
     
         cusp_grade = "N/A"
         incline_grade = "N/A"
@@ -152,10 +152,10 @@ class OCC_16PFMC:
             groove_grade = "F"
             groove_score = 1.5
     
-            finalscore = cusp_score + incline_score + groove_score
+        finalscore = cusp_score + incline_score + groove_score
     
     
-            return finalscore, cusp_grade, incline_grade, groove_grade
+        return finalscore, cusp_grade, incline_grade, groove_grade
 
     def db_calculator(self):
         cusp  = self.db_cusp
@@ -167,12 +167,12 @@ class OCC_16PFMC:
         incline_score = 0
         groove_score = 0
 
-        Amin  = threshold['A'][1]
-        Amax = threshold['A'][0]
-        Bmin = threshold['B'][1]
-        Bmax = threshold['B'][0]
-        Cmin = threshold['C'][1]
-        Cmax = threshold['C'][0]
+        Amin  = threshold['A'][0]
+        Amax = threshold['A'][1]
+        Bmin = threshold['B'][0]
+        Bmax = threshold['B'][1]
+        Cmin = threshold['C'][0]
+        Cmax = threshold['C'][1]
 
         cusp_grade = "N/A"
         incline_grade = "N/A"
@@ -232,12 +232,12 @@ class OCC_16PFMC:
         incline_score = 0
         groove_score = 0
 
-        Amin  = threshold['A'][1]
-        Amax = threshold['A'][0]
-        Bmin = threshold['B'][1]
-        Bmax = threshold['B'][0]
-        Cmin = threshold['C'][1]
-        Cmax = threshold['C'][0]
+        Amin  = threshold['A'][0]
+        Amax = threshold['A'][1]
+        Bmin = threshold['B'][0]
+        Bmax = threshold['B'][1]
+        Cmin = threshold['C'][0]
+        Cmax = threshold['C'][1]
 
         cusp_grade = "N/A"
         incline_grade = "N/A"

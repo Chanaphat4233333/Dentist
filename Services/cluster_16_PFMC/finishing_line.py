@@ -13,8 +13,10 @@ class Finishing_line_16PFMC:
         self.ml_grade, self.ml_score = self.ml_calculator()
         self.db_grade, self.db_score = self.db_calculator()
         self.dl_grade, self.dl_score = self.dl_calculator()
+        self.mesial_grade, self.mesial_score = self.mesial_calculator()
+        self.distal_grade, self.distal_score = self.distal_calculator()
 
-        self.final_score = self.finalscore(self.mb_score, self.ml_score, self.db_score, self.dl_score)
+        self.final_score = self.finalscore(self.mb_score, self.ml_score, self.db_score, self.dl_score, self.mesial_score, self.distal_score)
     
     def mb_calculator(self):
         threshold = self.threshold1

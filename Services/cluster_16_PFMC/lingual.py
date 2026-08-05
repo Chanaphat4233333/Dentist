@@ -7,17 +7,25 @@ class Lingual_16PFMC:
         self.threshold = threshold
         if self.mlp1 == 0:
             self.mlp1_grade, self.mlp1_score = self.mlp1_calculator()
-        elif self.mlp2 ==0:
+            self.mlp2_grade = self.mlp1_grade
+            self.mlp2_score = 0
+        elif self.mlp2 == 0:
             self.mlp2_grade, self.mlp2_score = self.mlp2_calculator()
-        else :
+            self.mlp1_grade = self.mlp2_grade
+            self.mlp1_score = 0
+        else:
             self.mlp1_grade, self.mlp1_score = self.mlp1_calculator()
             self.mlp2_grade, self.mlp2_score = self.mlp2_calculator()
         
-        if self.dlp1 ==0:
+        if self.dlp1 == 0:
             self.dlp1_grade, self.dlp1_score = self.dlp1_calculator()
-        elif self.dlp2 ==0:
+            self.dlp2_grade = self.dlp1_grade
+            self.dlp2_score = 0
+        elif self.dlp2 == 0:
             self.dlp2_grade, self.dlp2_score = self.dlp2_calculator()
-        else :
+            self.dlp1_grade = self.dlp2_grade
+            self.dlp1_score = 0
+        else:
             self.dlp1_grade, self.dlp1_score = self.dlp1_calculator()
             self.dlp2_grade, self.dlp2_score = self.dlp2_calculator()
         self.final_score = self.finalscore(self.mlp1_score, self.mlp2_score, self.dlp1_score, self.dlp2_score)
