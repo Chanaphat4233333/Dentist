@@ -67,7 +67,10 @@ file_path_var = tk.StringVar()
 
 tk.Label(root, text="Select Type:").pack(anchor="w", padx=10, pady=(10, 0))
 type_options = ['35_PFMC', '11_lithium', '16_PFMC', '46_FMC', '37_FMC']
-type_dropdown = ttk.Combobox(root, textvariable=type_var, values=type_options, state="readonly")
+
+type_var.set(type_options[0]) 
+
+type_dropdown = tk.OptionMenu(root, type_var, *type_options)
 type_dropdown.pack(fill="x", padx=10, pady=5)
 
 tk.Label(root, text="Select Data File:").pack(anchor="w", padx=10, pady=(10, 0))
