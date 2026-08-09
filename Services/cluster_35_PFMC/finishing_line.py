@@ -29,16 +29,16 @@ class FinishingLine:
         score_Buccal = 0
         if Values >= Amin and Values <= Amax:
             Grade_Buccal = "A"
-            score_Buccal = 10
+            score_Buccal = 15
         elif Values > Bmin and Values <= Bmax:
             Grade_Buccal = "B"
-            score_Buccal = 8
+            score_Buccal = 12
         elif Values > Cmin and Values <= Cmax:
             Grade_Buccal = "C"
-            score_Buccal = 6
+            score_Buccal = 9
         else:
             Grade_Buccal = "F"
-            score_Buccal = 3
+            score_Buccal = 4.5
         return Grade_Buccal, score_Buccal
     
     def LingualCalculator(self):
@@ -53,16 +53,16 @@ class FinishingLine:
         score_Lingual = 0
         if Values >= Amin and Values <= Amax:
             Grade_Lingual = "A"
-            score_Lingual = 10
+            score_Lingual = 15
         elif Values > Bmin and Values <= Bmax:
             Grade_Lingual = "B"
-            score_Lingual = 8
+            score_Lingual = 12
         elif Values > Cmin and Values <= Cmax:
             Grade_Lingual = "C"
-            score_Lingual = 6
+            score_Lingual = 9
         else:
             Grade_Lingual = "F"
-            score_Lingual = 3
+            score_Lingual = 4.5
         return Grade_Lingual, score_Lingual
 
     def MesialCalculator(self):
@@ -77,16 +77,16 @@ class FinishingLine:
         score_Mesial = 0
         if Values >= Amin and Values <= Amax:
             Grade_Mesial = "A"
-            score_Mesial = 10
+            score_Mesial = 15
         elif Values > Bmin and Values <= Bmax:
             Grade_Mesial = "B"
-            score_Mesial = 8
+            score_Mesial = 12
         elif Values > Cmin and Values <= Cmax:
             Grade_Mesial = "C"
-            score_Mesial = 6
+            score_Mesial = 9
         else:
             Grade_Mesial = "F"
-            score_Mesial = 3
+            score_Mesial = 4.5
         return Grade_Mesial, score_Mesial
     
     def DistalCalculator(self):
@@ -101,16 +101,16 @@ class FinishingLine:
         score_Distal = 0
         if Values >= Amin and Values <= Amax:
             Grade_Distal = "A"
-            score_Distal = 10
+            score_Distal = 15
         elif Values > Bmin and Values <= Bmax:
             Grade_Distal = "B"
-            score_Distal = 8
+            score_Distal = 12
         elif Values > Cmin and Values <= Cmax:
             Grade_Distal = "C"
-            score_Distal = 6
+            score_Distal = 9
         else:
             Grade_Distal = "F"
-            score_Distal = 3
+            score_Distal = 4.5
         return Grade_Distal, score_Distal
 
     def Finalscore(self, score_Buccal, score_Lingual, score_Mesial, score_Distal):

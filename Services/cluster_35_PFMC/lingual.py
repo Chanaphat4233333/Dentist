@@ -24,16 +24,16 @@ class Lingual:
         score_Lplane1 = 0
         if Values >= Amin and Values <= Amax:
             Grade_Lplane1 = "A"
-            score_Lplane1 = 10
+            score_Lplane1 = 30
         elif Values > Bmin and Values <= Bmax:
             Grade_Lplane1 = "B"
-            score_Lplane1 = 8
+            score_Lplane1 = 24
         elif Values > Cmin and Values <= Cmax:
             Grade_Lplane1 = "C"
-            score_Lplane1 = 6
+            score_Lplane1 = 18
         else:
             Grade_Lplane1 = "F"
-            score_Lplane1 = 3
+            score_Lplane1 = 9
         return Grade_Lplane1, score_Lplane1 
     
 
@@ -49,16 +49,16 @@ class Lingual:
         score_Lplane2 = 0
         if Values >= Amin and Values <= Amax:
             Grade_Lplane2 = "A"
-            score_Lplane2 = 10
+            score_Lplane2 = 30
         elif Values > Bmin and Values <= Bmax:
             Grade_Lplane2 = "B"
-            score_Lplane2 = 8
+            score_Lplane2 = 24
         elif Values > Cmin and Values <= Cmax:
             Grade_Lplane2 = "C"
-            score_Lplane2 = 6
+            score_Lplane2 = 18
         else:
             Grade_Lplane2 = "F"
-            score_Lplane2 = 3
+            score_Lplane2 = 9
         return Grade_Lplane2, score_Lplane2 
 
     def finalScore(self, score_Lplane1, score_Lplane2):

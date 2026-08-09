@@ -44,41 +44,42 @@ cluster_35_PFMC:
   B: [10, 15]
   C: [15, 20]
   F: [0.0,20]
+ Final_score:
+   A: [300,360]
+   B : [240,300]
+   C: [216,240]
+   F : [216]
 
  Header_Format:
    - "student_id"
    - "name"
+   - "Final_grade"
+   - "Total_score"
+   - "Overall_grade"
    - "OCC_score"
-   - "OCC_Grade"
    - "OCC_central-groove_grade"
    - "OCC_B-func_grade"
    - "OCC_L-incline of B cusp_grade"
    - "OCC_L nonfunc_grade"
    - "OCC_B incline of L cusp_grade"
    - "Buccal_score"
-   - "Buccal_Grade"
    - "Buccal_B plane1_grade"
    - "Buccal_B plane2_grade"
    - "Lingual_score"
-   - "Lingual_Grade"
    - "Lingual_plane1_grade"
    - "Lingual_plane2_grade"
    - "Proximal_score"
-   - "Proximal_Grade"
    - "Proximal_Mesial_grade"
    - "Proximal_Distal_grade"
    - "FinishingLine_score"
-   - "FinishingLine_Grade"
    - "FinishingLine_Buccal_grade"
    - "FinishingLine_Lingual_grade"
    - "FinishingLine_Mesial_grade"
    - "FinishingLine_Distal_grade"
    - "TOC_score"
-   - "TOC_Grade"
    - "TOC_BL_grade"
    - "TOC_MD_grade"
-   - "TOTAL"
-   - "Grade_overall"
+   - "issue"
 
 cluster_11_lithium:
    incisal_edge :
@@ -121,7 +122,8 @@ cluster_11_lithium:
    - "student_id"
    - "name"
    - "total_score"
-   - "final_garde"
+   - "final_grade"
+   - "overall_grade"
    - "incisal_score"
    - "incisal_grade"
    - "buccal_score"
@@ -187,7 +189,174 @@ cluster_16_PFMC:
    - "student_id"
    - "name"
    - "total_score"
-   - "final_garde"
+   - "final_grade"
+   - "overall_grade"
+   - "OCC_score"
+   - "OCC_MB_cusp_grade"
+   - "OCC_MB_incline_grade"
+   - "OCC_MB_groove_grade"
+   - "OCC_DB_cusp_grade"
+   - "OCC_DB_incline_grade"
+   - "OCC_DB_groove_grade"
+   - "OCC_ML_cusp_grade"
+   - "OCC_ML_incline_grade"
+   - "OCC_ML_groove_grade"
+   - "OCC_DL_cusp_grade"
+   - "OCC_DL_incline_grade"
+   - "OCC_DL_groove_grade"
+   - "Buccal_score"
+   - "Buccal_MBP1_grade"
+   - "Buccal_MBP2_grade"
+   - "Buccal_DBP1_grade"
+   - "Buccal_DBP2_grade"
+   - "Lingual_score"
+   - "Lingual_MLP1_grade"
+   - "Lingual_MLP2_grade"
+   - "Lingual_DLP1_grade"
+   - "Lingual_DLP2_grade"
+   - "Proximal_score"
+   - "Proximal_mesial_grade"
+   - "Proximal_distal_grade"
+   - "Finishing_line_score"
+   - "Finishing_line_MB_grade"
+   - "Finishing_line_ML_grade"
+   - "Finishing_line_DB_grade"
+   - "Finishing_line_DL_grade"
+   - "Finishing_line_mesial_grade"
+   - "Finishing_line_distal_grade"
+   - "TOC_score"
+   - "TOC_MD_grade"
+   - "TOC_BL_grade"
+   - "issue"
+
+cluster_46_FMC:
+   occ_46FMC1:
+      A: [1.5,2]
+      B: [2,2.3]
+      C: [2.3,2.6]
+   occ_46FMC2:
+      A: [1,1.5]
+      B: [1.5,1.725]
+      C: [1.725,1.95]
+
+   buccal_46FMC:
+      A: [1,1.5]
+      B: [1.5,1.725]
+      C: [1.725,1.95]
+
+   lingual_46FMC:
+      A: [1,1.5]
+      B: [1.5,1.725]
+      C: [1.725, 1.95]
+
+   proximal_46FMC:
+      A: [1.2,1.5]
+      B: [1.5, 1.725]
+      C: [1.725, 1.95]
+
+   finishing_line:
+      A: [0.5,0.8]
+      B: [0.8,0.92]
+      C: [0.92, 1.04]
+
+   toc_46FMC:
+      A: [0,10]
+      B: [10,15]
+      C: [15,20]
+   Final_score:
+    A: [300,360]
+    B : [240,300]
+    C: [216,240]
+    F : [216]
+   Header_Format:
+   - "student_id"
+   - "name"
+   - "total_score"
+   - "final_grade"
+   - "overall_grade"
+   - "OCC_score"
+   - "OCC_MB_cusp_grade"
+   - "OCC_MB_incline_grade"
+   - "OCC_MB_groove_grade"
+   - "OCC_DB_cusp_grade"
+   - "OCC_DB_incline_grade"
+   - "OCC_DB_groove_grade"
+   - "OCC_ML_cusp_grade"
+   - "OCC_ML_incline_grade"
+   - "OCC_ML_groove_grade"
+   - "OCC_DL_cusp_grade"
+   - "OCC_DL_incline_grade"
+   - "OCC_DL_groove_grade"
+   - "Buccal_score"
+   - "Buccal_MBP1_grade"
+   - "Buccal_MBP2_grade"
+   - "Buccal_DBP1_grade"
+   - "Buccal_DBP2_grade"
+   - "Lingual_score"
+   - "Lingual_MLP1_grade"
+   - "Lingual_MLP2_grade"
+   - "Lingual_DLP1_grade"
+   - "Lingual_DLP2_grade"
+   - "Proximal_score"
+   - "Proximal_mesial_grade"
+   - "Proximal_distal_grade"
+   - "Finishing_line_score"
+   - "Finishing_line_MB_grade"
+   - "Finishing_line_ML_grade"
+   - "Finishing_line_DB_grade"
+   - "Finishing_line_DL_grade"
+   - "Finishing_line_mesial_grade"
+   - "Finishing_line_distal_grade"
+   - "TOC_score"
+   - "TOC_MD_grade"
+   - "TOC_BL_grade"
+   - "issue"
+
+cluster_37_FMC:
+   occ_37FMC1:
+      A: [1.5,2]
+      B: [2,2.3]
+      C: [2.3,2.6]
+   occ_37FMC2:
+      A: [1,1.5]
+      B: [1.5,1.725]
+      C: [1.725,1.95]
+
+   buccal_37FMC:
+      A: [1,1.5]
+      B: [1.5,1.725]
+      C: [1.725,1.95]
+
+   lingual_37FMC:
+      A: [1,1.5]
+      B: [1.5,1.725]
+      C: [1.725, 1.95]
+
+   proximal_37FMC:
+      A: [1.2,1.5]
+      B: [1.5, 1.725]
+      C: [1.725, 1.95]
+
+   finishing_line:
+      A: [0.5,0.8]
+      B: [0.8,0.92]
+      C: [0.92, 1.04]
+
+   toc_37FMC:
+      A: [0,10]
+      B: [10,15]
+      C: [15,20]
+   Final_score:
+    A: [300,360]
+    B : [240,300]
+    C: [216,240]
+    F : [216]
+   Header_Format:
+   - "student_id"
+   - "name"
+   - "total_score"
+   - "final_grade"
+   - "overall_grade"
    - "OCC_score"
    - "OCC_MB_cusp_grade"
    - "OCC_MB_incline_grade"

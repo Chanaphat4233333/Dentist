@@ -25,16 +25,16 @@ class Proximal:
         score_Mesial = 0
         if Values >= Amin and Values <= Amax:
             Grade_Mesial = "A"
-            score_Mesial = 10
+            score_Mesial = 30
         elif Values > Bmin and Values <= Bmax:
             Grade_Mesial = "B"
-            score_Mesial = 8
+            score_Mesial = 24
         elif Values > Cmin and Values <= Cmax:
             Grade_Mesial = "C"
-            score_Mesial = 6
+            score_Mesial = 18
         else:
             Grade_Mesial = "F"
-            score_Mesial = 3
+            score_Mesial = 9
         return Grade_Mesial, score_Mesial 
     
     def DistalCalculator(self):
@@ -49,16 +49,16 @@ class Proximal:
         score_Distal = 0
         if Values >= Amin and Values <= Amax:
             Grade_Distal = "A"
-            score_Distal = 10
+            score_Distal = 30
         elif Values > Bmin and Values <= Bmax:
             Grade_Distal = "B"
-            score_Distal = 8
+            score_Distal = 24
         elif Values > Cmin and Values <= Cmax:
             Grade_Distal = "C"
-            score_Distal = 6
+            score_Distal = 18
         else:
             Grade_Distal = "F"
-            score_Distal = 3
+            score_Distal = 9
         return Grade_Distal, score_Distal 
     
     def finalScore(self, score_Mesial, score_Distal):

@@ -30,16 +30,16 @@ class TOC:
         score_MD = 0
         if not IsUndercut:
             if MDValue >= Amin and MDValue <=10:
-                score_MD = 10
+                score_MD = 30
                 Grade_MD = "A"
             elif MDValue >Bmin and MDValue <=Bmax:
-                score_MD = 8
+                score_MD = 24
                 Grade_MD = "B"
             elif MDValue > Cmin and MDValue <= Cmax:
-                score_MD = 6
+                score_MD = 18
                 Grade_MD = "C"
             else:
-                score_MD = 3
+                score_MD = 9
                 Grade_MD = "F"
         else:
             score_MD = 3
@@ -62,19 +62,19 @@ class TOC:
         score_BL = 0
         if not IsUndercut:
             if BLValue >= Amin and BLValue <=10:
-                score_BL = 10
+                score_BL = 30
                 Grade_BL = "A"
             elif BLValue >Bmin and BLValue <=Bmax:
-                score_BL = 8
+                score_BL = 24
                 Grade_BL = "B"
             elif BLValue > Cmin and BLValue <= Cmax:
-                score_BL = 6
+                score_BL = 18
                 Grade_BL = "C"
             else:
-                score_BL = 3
+                score_BL = 9
                 Grade_BL = "F"
         else:
-            score_BL = 3
+            score_BL = 9
             Grade_BL = "F"
         
         return score_BL, Grade_BL

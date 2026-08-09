@@ -51,16 +51,16 @@ class Occ:
         score_Occ_B = 0
         if Values >= Amin and Values <= Amax:
             Grade_Occ_B = "A"
-            score_Occ_B = 10
+            score_Occ_B = 12
         elif Values > Bmin and Values <= Bmax:
             Grade_Occ_B = "B"
-            score_Occ_B = 8
+            score_Occ_B = 9.6
         elif Values > Cmin and Values <= Cmax:
             Grade_Occ_B = "C"
-            score_Occ_B = 6
+            score_Occ_B = 7.2
         else:
             Grade_Occ_B = "F"
-            score_Occ_B = 3
+            score_Occ_B = 3.6
         return Grade_Occ_B, score_Occ_B
 
     def OccCental_function(self, list_OCc):
@@ -72,16 +72,16 @@ class Occ:
         score_Cental_groove = 0
         if Values >= Amin and Values <= Amax:
             Grade_Cental_groove = "A"
-            score_Cental_groove = 10
+            score_Cental_groove = 12
         elif Values > Bmin and Values <= Bmax:
             Grade_Cental_groove = "B"
-            score_Cental_groove = 8
+            score_Cental_groove = 9.6
         elif Values > Cmin and Values <= Cmax:
             Grade_Cental_groove = "C"
-            score_Cental_groove = 6
+            score_Cental_groove = 7.2
         else:
             Grade_Cental_groove = "F"
-            score_Cental_groove = 3
+            score_Cental_groove = 3.6
         return Grade_Cental_groove, score_Cental_groove
     
     def OccLofB_function(self, list_OCc):
@@ -93,16 +93,16 @@ class Occ:
         score_L_of_B = 0
         if Values >= Amin and Values <= Amax:
             Grade_L_of_B = "A"
-            score_L_of_B = 10
+            score_L_of_B = 12
         elif Values > Bmin and Values <= Bmax:
             Grade_L_of_B = "B"
-            score_L_of_B = 8
+            score_L_of_B = 9.6
         elif Values > Cmin and Values <= Cmax:
             Grade_L_of_B = "C"
-            score_L_of_B = 6
+            score_L_of_B = 7.2
         else:
             Grade_L_of_B = "F"
-            score_L_of_B = 3
+            score_L_of_B = 3.6
         return Grade_L_of_B, score_L_of_B
     
     def OccLnon_function(self, list_OCc):
@@ -115,16 +115,16 @@ class Occ:
         score_Lnon = 0
         if Values >= Amin and Values <= Amax:
             Grade_Lnon = "A"
-            score_Lnon = 10
+            score_Lnon = 12
         elif Values > Bmin and Values <= Bmax:
             Grade_Lnon = "B"
-            score_Lnon = 8
+            score_Lnon = 9.6
         elif Values > Cmin and Values <= Cmax:
             Grade_Lnon = "C"
-            score_Lnon = 6
+            score_Lnon = 7.2
         else:
             Grade_Lnon = "F"
-            score_Lnon = 3
+            score_Lnon = 3.6
         return Grade_Lnon, score_Lnon
 
     def OccBofL_function(self, list_OCc):
@@ -137,16 +137,16 @@ class Occ:
         score_BofL = 0
         if Values >= Amin and Values <= Amax:
             Grade_BofL = "A"
-            score_BofL = 10
+            score_BofL = 12
         elif Values > Bmin and Values <= Bmax:
             Grade_BofL = "B"
-            score_BofL = 8
+            score_BofL = 9.6
         elif Values > Cmin and Values <= Cmax:
             Grade_BofL = "C"
-            score_BofL = 6
+            score_BofL = 7.2
         else:
             Grade_BofL = "F"
-            score_BofL = 3
+            score_BofL = 3.6
         return Grade_BofL, score_BofL
 
     def FinalScore(self, score_Occ_B, score_Cental_groove, score_L_of_B, score_Lnon, score_BofL):

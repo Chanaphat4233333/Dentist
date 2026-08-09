@@ -29,16 +29,16 @@ class Buccal:
         score_Bplane1 = 0
         if Values >= Amin and Values <= Amax:
             Grade_Bplane1 = "A"
-            score_Bplane1 = 10
+            score_Bplane1 = 30
         elif Values > Bmin and Values <= Bmax:
             Grade_Bplane1 = "B"
-            score_Bplane1 = 8
+            score_Bplane1 = 24
         elif Values > Cmin and Values <= Cmax:
             Grade_Bplane1 = "C"
-            score_Bplane1 = 6
+            score_Bplane1 = 18
         else:
             Grade_Bplane1 = "F"
-            score_Bplane1 = 3
+            score_Bplane1 = 9
         return Grade_Bplane1, score_Bplane1 
     def Bplane2Calculator(self):
         grade = "N/A"
@@ -54,16 +54,16 @@ class Buccal:
         score_Bplane2 = 0
         if Values >= Amin and Values <= Amax:
             Grade_Bplane2 = "A"
-            score_Bplane2 = 10
+            score_Bplane2 = 30
         elif Values > Bmin and Values <= Bmax:
             Grade_Bplane2 = "B"
-            score_Bplane2 = 8
+            score_Bplane2 = 24
         elif Values > Cmin and Values <= Cmax:
             Grade_Bplane2 = "C"
-            score_Bplane2 = 6
+            score_Bplane2 = 18
         else:
             Grade_Bplane2 = "F"
-            score_Bplane2 = 3
+            score_Bplane2 = 9
         return Grade_Bplane2, score_Bplane2 
     
     def finalScore(self, score_Bplane1, score_Bplane2):

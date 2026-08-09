@@ -26,6 +26,19 @@ from Services.cluster_16_PFMC.proximal import Proximal_16PFMC
 from Services.cluster_16_PFMC.finishing_line import Finishing_line_16PFMC
 from Services.cluster_16_PFMC.toc import TOC_16PFMC
 
+from Services.cluster_46_FMC.occ import OCC_46FMC
+from Services.cluster_46_FMC.buccal import Buccal_46FMC
+from Services.cluster_46_FMC.lingual import Lingual_46FMC
+from Services.cluster_46_FMC.proximal import Proximal_46FMC
+from Services.cluster_46_FMC.finishing_line import Finishing_line_46FMC
+from Services.cluster_46_FMC.toc import TOC_46FMC
+
+from Services.cluster_37_FMC.occ import OCC_37FMC
+from Services.cluster_37_FMC.buccal import Buccal_37FMC
+from Services.cluster_37_FMC.lingual import Lingual_37FMC
+from Services.cluster_37_FMC.proximal import Proximal_37FMC
+from Services.cluster_37_FMC.finishing_line import Finishing_line_37FMC
+from Services.cluster_37_FMC.toc import TOC_37FMC
 
 def loadConfig():
     with open("config.yml", "r", encoding="utf-8") as file:
@@ -46,6 +59,7 @@ def cluster_35_PFMC(config, data, data_range):
     Proximal_theshold = config35PFMC['Proximal_theshold']
     FinishinglineB_theshold = config35PFMC['FinishingLineB_theshold']
     FinishinglineL_theshold = config35PFMC['FinishingLineL-Distal_theshold']
+    final_score = config35PFMC['Final_score']
     TOC_theshold = config35PFMC['TOC_theshold']
 
     time_stamp = datetime.now().strftime("%Y-%m-%d")
@@ -73,6 +87,10 @@ def cluster_35_PFMC(config, data, data_range):
     all_results_encrypt = []
     crypto_config = config['Encrypt']
     secretkey = crypto_config['secret']
+    gradeA = 0
+    gradeB = 0
+    gradeC = 0
+    gradeF = 0
     for i in range (data_range) :
         OCC_method = Occ(
             id  = data.iloc[i+2,0],
@@ -134,47 +152,80 @@ def cluster_35_PFMC(config, data, data_range):
             fixatrow = i+1,
             filenameDB = file_name_db
         )
-
+        final_grade = "N/A"
+        overall_grade = "N/A"
+                
+        issue =""
+        undercut = str(data.iloc[i+2,19])
+        undercut2 = str(data.iloc[i+2,21])
+        finalscore = OCC_method.final_score + Buccal_method.final_score + Lingual_method.final_score + Proximal_method.final_score + Finishingline_method.final_score + TOC_method.final_score
+        if undercut == "no" and undercut2 == "no":
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_garde = "A"
+                final_grade = "A"
+                gradeA +=1
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_garde = "B"
+                final_grade = "B"
+                gradeB +=1
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_garde = "C"
+                final_grade = "C"
+                gradeC +=1
+            else:
+                overall_garde = "F"
+                gradeF +=1
+                final_grade = "F"
+        else:
+            gradeF +=1
+            issue = "undercut"
+            final_grade = "F"
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
+            else:
+                overall_grade = "F"
+            
         rowdata = {
-            'student_id': OCC_method.id,
-            'name': OCC_method.name,
-            'OCC_score': OCC_method.final_score,
-            'OCC_Grade': "",
-            'OCC_central-groove_grade': OCC_method.Grade_Cental_groove,
-            'OCC_B-func_grade': OCC_method.Grade_Occ_B,
-            'OCC_L-incline of B cusp_grade': OCC_method.Grade_L_of_B,
-            'OCC_L nonfunc_grade': OCC_method.Grade_Lnon,
-            'OCC_B incline of L cusp_grade': OCC_method.Grade_BofL,
+        'student_id': OCC_method.id,
+        'name': OCC_method.name,
+        'Final_grade': final_grade,
+        'Total_score': finalscore,
+        'Overall_grade' : overall_garde,
+            
+        'OCC_score' : OCC_method.final_score,
+        'OCC_central-groove_grade': OCC_method.Grade_Cental_groove,
+        'OCC_B-func_grade': OCC_method.Grade_Occ_B,
+        'OCC_L-incline of B cusp_grade': OCC_method.Grade_L_of_B,
+        'OCC_L nonfunc_grade': OCC_method.Grade_Lnon,
+        'OCC_B incline of L cusp_grade': OCC_method.Grade_BofL,
 
-            'Buccal_score': Buccal_method.final_score,
-            'Buccal_Grade': "",
-            'Buccal_B plane1_grade': Buccal_method.Grade_Buccal_Bplane1,
-            'Buccal_B plane2_grade': Buccal_method.Grade_Buccal_Bplane2,
+        'Buccal_score': Buccal_method.final_score,
+        'Buccal_B plane1_grade': Buccal_method.Grade_Buccal_Bplane1,
+        'Buccal_B plane2_grade': Buccal_method.Grade_Buccal_Bplane2,
 
-            'Lingual_score': Lingual_method.final_score,
-            'Lingual_Grade': "",
-            'Lingual_plane1_grade': Lingual_method.Grade_Lplane1,
-            'Lingual_plane2_grade': Lingual_method.Grade_Lplane2,
+        'Lingual_score': Lingual_method.final_score,
+        'Lingual_plane1_grade': Lingual_method.Grade_Lplane1,
+        'Lingual_plane2_grade': Lingual_method.Grade_Lplane2,
 
-            'Proximal_score': Proximal_method.final_score,
-            'Proximal_Grade': "",
-            'Proximal_Mesial_grade': Proximal_method.Grade_Mesial,
-            'Proximal_Distal_grade': Proximal_method.Grade_Distal,
+        'Proximal_score': Proximal_method.final_score,
+        'Proximal_Mesial_grade': Proximal_method.Grade_Mesial,
+        'Proximal_Distal_grade': Proximal_method.Grade_Distal,
 
-            'FinishingLine_score': Finishingline_method.final_score,
-            'FinishingLine_Grade': "",
-            'FinishingLine_Buccal_grade': Finishingline_method.Grade_Buccal,
-            'FinishingLine_Lingual_grade': Finishingline_method.Grade_Lingual,
-            'FinishingLine_Mesial_grade': Finishingline_method.Grade_Mesial,
-            'FinishingLine_Distal_grade': Finishingline_method.Grade_Distal,
+        'FinishingLine_score': Finishingline_method.final_score,
+        'FinishingLine_Buccal_grade': Finishingline_method.Grade_Buccal,
+        'FinishingLine_Lingual_grade': Finishingline_method.Grade_Lingual,
+        'FinishingLine_Mesial_grade': Finishingline_method.Grade_Mesial,
+        'FinishingLine_Distal_grade': Finishingline_method.Grade_Distal,
 
-            'TOC_score': TOC_method.final_score,
-            'TOC_Grade': "",
-            'TOC_BL_grade': TOC_method.Grade_BL,
-            'TOC_MD_grade': TOC_method.Grade_MD,
+        'TOC_score': TOC_method.final_score,
+        'TOC_BL_grade': TOC_method.Grade_BL,
+        'TOC_MD_grade': TOC_method.Grade_MD,
 
-            'TOTAL': OCC_method.final_score + Buccal_method.final_score + Lingual_method.final_score + Proximal_method.final_score + Finishingline_method.final_score + TOC_method.final_score,
-            'Grade_overall': "",
+        'issue': issue
 
         }
         name_encrypt = encrypt_aes256(OCC_method.name, secretkey)
@@ -186,8 +237,18 @@ def cluster_35_PFMC(config, data, data_range):
 
   
     df = pd.DataFrame(all_results, columns=file_header)
-    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+    totalstudent = len(all_results)
     
+    summary_data = {
+        "Summary": ["total", "A", "B", "C", "F"], 
+        "Count": [totalstudent, gradeA, gradeB, gradeC, gradeF],
+    }
+    count_score_df = pd.DataFrame(summary_data)
+    
+    
+    final_df = pd.concat([df, count_score_df], axis=1)
+    final_df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+            
     df_enc = pd.DataFrame(all_results_encrypt, columns=file_header)
     df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
 
@@ -269,6 +330,7 @@ def cluster_11_lithium(config, data, data_range):
             threshold = toc_threshold
         )
         final_grade = "N/A"
+        overall_grade = "N/A"
         
         issue =""
         undercut = str(data.iloc[i+2,15])
@@ -278,28 +340,41 @@ def cluster_11_lithium(config, data, data_range):
         finalscore = Incisal_method.final_score + buccal_method.final_score + lingual_method.final_score + proximal_method.final_score + finishing_line_method.final_score + toc_method.final_score
         if undercut == "no":
             if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
                 final_grade = "A"
                 gradeA +=1
             elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
                 final_grade = "B"
                 gradeB +=1
             elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
                 final_grade = "C"
                 gradeC +=1
             else:
-                gradeF +=1
+                overall_grade = "F"
                 final_grade = "F"
+                gradeF +=1
         else:
-            gradeF +=1
             issue = "undercut"
             final_grade = "F"
+            gradeF +=1
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
+            else:
+                overall_grade = "F"
             
         
         rowdata = {
             "student_id": str(data.iloc[i+2,0]),
             "name": str(data.iloc[i+2,1]),
             "total_score": finalscore,
-            "final_garde": final_grade,
+            "final_grade": final_grade,
+            "overall_grade": overall_grade,
             "incisal_score": Incisal_method.final_score,
             "incisal_grade": Incisal_method.incisal_grade,
             "buccal_score" : buccal_method.final_score,
@@ -446,32 +521,47 @@ def cluster_16_PFMC(config, data, data_range):
             threshold = toc_16PFMC_threshold
         )
         final_grade = "N/A"
+        overall_grade = "N/A"
         issue =""
         undercut = str(data.iloc[i+2,33])
         finalscore = occ_16PFMC.final_score + buccal_16PFMC.final_score + lingual_16PFMC.final_score + proximal_16PFMC.final_score + finishing_line_16PFMC.final_score + toc_16PFMC.final_score
         if undercut == "no":
             if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
                 final_grade = "A"
                 gradeA +=1
             elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
                 final_grade = "B"
                 gradeB +=1
             elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
                 final_grade = "C"
                 gradeC +=1
             else:
+                overall_grade = "F"
                 gradeF +=1
                 final_grade = "F"
         else:
             gradeF +=1
             issue = "undercut"
             final_grade = "F"
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
+            else:
+                overall_grade = "F"
         
         rowdata = {
             "student_id": str(data.iloc[i+2,0]),
             "name": str(data.iloc[i+2,2]),
             "total_score": finalscore,
-            "final_garde": final_grade,
+            "final_grade": final_grade,
+            "overall_grade": overall_grade,
+            
             "OCC_score": occ_16PFMC.final_score,
             "OCC_MB_cusp_grade": occ_16PFMC.cusp_mdgrade,
             "OCC_MB_incline_grade" : occ_16PFMC.incline_mdgrade,
@@ -535,9 +625,409 @@ def cluster_16_PFMC(config, data, data_range):
     df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
     
     return file_path_result
+
+def cluster_46_FMC(config, data, data_range):
+    config_46_FMC = config['cluster_46_FMC']
+    occ_46FMC1_threshold = config_46_FMC['occ_46FMC1']
+    occ_46FMC2_threshold = config_46_FMC['occ_46FMC2']
+    buccal_46FMC_threshold = config_46_FMC['buccal_46FMC']
+    lingual_46FMC_threshold = config_46_FMC['lingual_46FMC']
+    proximal_46FMC_threshold = config_46_FMC['proximal_46FMC']
+    finishingline_threshold = config_46_FMC['finishing_line']
+    toc_46FMC_threshold = config_46_FMC['toc_46FMC']
+    final_score = config_46_FMC['Final_score']
+
+    time_stamp = datetime.now().strftime("%Y-%m-%d")
+    file_name = f"cluster_46_FMC_{time_stamp}.csv"
+    file_name_db = f"cluster_46_FMC_{time_stamp}_encrypt.csv"
+        
+    file_header = config_46_FMC['Header_Format']
+    folder_name_result = "results"
+    folder_name_encrypt = "results_encrypt"
+
+    if not os.path.exists(folder_name_result):
+        os.makedirs(folder_name_result)
+    if not os.path.exists(folder_name_encrypt):
+        os.makedirs(folder_name_encrypt)
+        
+    file_path_result = os.path.join(folder_name_result, file_name)
+    file_path_encrypt = os.path.join(folder_name_encrypt, file_name_db)
+    df = pd.DataFrame(columns=file_header)
+        
+    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+    df_enc = pd.DataFrame(columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+        
+    all_results = []
+    all_results_encrypt = []
+        
+    crypto_config = config['Encrypt']
+    secretkey = crypto_config['secret']
+    gradeA = 0
+    gradeB = 0
+    gradeC = 0
+    gradeF = 0
+
+    # for i in range(data_range):
+    
+    for i in range(data_range):
+        occ_46FMC = OCC_46FMC(
+            mb_cusp = float(data.iloc[i+2,3]),
+            mb_incline = float(data.iloc[i+2,4]),
+            mb_groove = float(data.iloc[i+2,5]),
+            ml_cusp = float(data.iloc[i+2,6]),
+            ml_incline = float(data.iloc[i+2,7]),
+            ml_groove = float(data.iloc[i+2,8]),
+            db_cusp = float(data.iloc[i+2,9]),
+            db_incline = float(data.iloc[i+2,10]),
+            db_groove = float(data.iloc[i+2,11]),
+            dl_cusp = float(data.iloc[i+2,12]),
+            dl_incline = float(data.iloc[i+2,13]),
+            dl_groove = float(data.iloc[i+2,14]),
+            threshold1 = occ_46FMC1_threshold,
+            threshold2 = occ_46FMC2_threshold
+        )
+        buccal_46FMC = Buccal_46FMC(
+            mbp1 = float(data.iloc[i+2,15]),
+            mbp2 = float(data.iloc[i+2,16]),
+            dbp1 = float(data.iloc[i+2,17]),
+            dbp2 = float(data.iloc[i+2,18]),
+            threshold = buccal_46FMC_threshold
+        )
+        lingual_46FMC =Lingual_46FMC(
+            mlp1 = float(data.iloc[i+2,19]),
+            mlp2 = float(data.iloc[i+2,20]),
+            dlp1 = float(data.iloc[i+2,21]),
+            dlp2 = float(data.iloc[i+2,22]),
+            threshold = lingual_46FMC_threshold
+        )
+        proximal_46FMC = Proximal_46FMC(
+            mesial = float(data.iloc[i+2,23]),
+            distal = float(data.iloc[i+2,24]),
+            threshold = proximal_46FMC_threshold
+        )
+        finishing_line_46FMC = Finishing_line_46FMC(
+            mb = float(data.iloc[i+2,25]),
+            ml = float(data.iloc[i+2,26]),
+            db = float(data.iloc[i+2,27]),
+            dl = float(data.iloc[i+2,28]),
+            mesial = float(data.iloc[i+2,29]),
+            distal = float(data.iloc[i+2,30]),
+            threshold = finishingline_threshold
+        )
+        toc_46FMC = TOC_46FMC(
+            md = float(data.iloc[i+2,31]),
+            bl = float(data.iloc[i+2,32]),
+            threshold = toc_46FMC_threshold
+        )
+        final_grade = "N/A"
+        overall_grade = "N/A"
+        issue =""
+        undercut = str(data.iloc[i+2,33])
+        finalscore = occ_46FMC.final_score + buccal_46FMC.final_score + lingual_46FMC.final_score + proximal_46FMC.final_score + finishing_line_46FMC.final_score + toc_46FMC.final_score
+        if undercut == "no":
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
+                final_grade = "A"
+                gradeA +=1
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
+                final_grade = "B"
+                gradeB +=1
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
+                final_grade = "C"
+                gradeC +=1
+            else:
+                overall_grade = "F"
+                gradeF +=1
+                final_grade = "F"
+        else:
+            gradeF +=1
+            issue = "undercut"
+            final_grade = "F"
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
+            else:
+                overall_grade = "F"
+        
+        rowdata = {
+            "student_id": str(data.iloc[i+2,0]),
+            "name": str(data.iloc[i+2,2]),
+            "total_score": finalscore,
+            "final_grade": final_grade,
+            "overall_grade": overall_grade,
             
+            "OCC_score": occ_46FMC.final_score,
+            "OCC_MB_cusp_grade": occ_46FMC.cusp_mdgrade,
+            "OCC_MB_incline_grade" : occ_46FMC.incline_mdgrade,
+            "OCC_MB_groove_grade": occ_46FMC.groove_mdgrade,
+            "OCC_DB_cusp_grade": occ_46FMC.cusp_dbgrade,
+            "OCC_DB_incline_grade" : occ_46FMC.incline_dbgrade,
+            "OCC_DB_groove_grade": occ_46FMC.groove_dbgrade,
+            "OCC_ML_cusp_grade": occ_46FMC.cusp_mlgrade,
+            "OCC_ML_incline_grade": occ_46FMC.incline_mlgrade,
+            "OCC_ML_groove_grade": occ_46FMC.groove_mlgrade,
+            "OCC_DL_cusp_grade": occ_46FMC.cusp_dlgrade,
+            "OCC_DL_incline_grade": occ_46FMC.incline_dlgrade,
+            "OCC_DL_groove_grade": occ_46FMC.groove_dlgrade,
+            "Buccal_score": buccal_46FMC.final_score,
+            "Buccal_MBP1_grade": buccal_46FMC.mbp1_grade,
+            "Buccal_MBP2_grade": buccal_46FMC.mbp2_grade,
+            "Buccal_DBP1_grade": buccal_46FMC.dbp1_grade,
+            "Buccal_DBP2_grade": buccal_46FMC.dbp2_grade,
+            "Lingual_score": lingual_46FMC.final_score,
+            "Lingual_MLP1_grade":lingual_46FMC.mlp1_grade,
+            "Lingual_MLP2_grade":lingual_46FMC.mlp2_grade,
+            "Lingual_DLP1_grade":lingual_46FMC.dlp1_grade,
+            "Lingual_DLP2_grade":lingual_46FMC.dlp2_grade,
+            "Proximal_score": proximal_46FMC.final_score,
+            "Proximal_mesial_grade": proximal_46FMC.mesial_grade,
+            "Proximal_distal_grade": proximal_46FMC.distal_grade,
+            "Finishing_line_score": finishing_line_46FMC.final_score,
+            "Finishing_line_MB_grade": finishing_line_46FMC.mb_grade,
+            "Finishing_line_ML_grade": finishing_line_46FMC.ml_grade,
+            "Finishing_line_DB_grade": finishing_line_46FMC.db_grade,
+            "Finishing_line_DL_grade": finishing_line_46FMC.dl_grade,
+            "Finishing_line_mesial_grade": finishing_line_46FMC.mesial_grade,
+            "Finishing_line_distal_grade": finishing_line_46FMC.distal_grade,
+            "TOC_score": toc_46FMC.final_score,
+            "TOC_MD_grade": toc_46FMC.md_grade,
+            "TOC_BL_grade": toc_46FMC.bl_grade,
+            "issue":issue
+        }
+                
+        name_encrypt = encrypt_aes256(rowdata["name"], secretkey)
+        row_data_enc = rowdata.copy()
+        row_data_enc["name"] = name_encrypt.hex()
+                
+        all_results.append(rowdata)
+        all_results_encrypt.append(row_data_enc)
+    
+    df = pd.DataFrame(all_results, columns=file_header)
+    totalstudent = len(all_results)
+        
+    summary_data = {
+        "Summary": ["total", "A", "B", "C", "F"], 
+        "Count": [totalstudent, gradeA, gradeB, gradeC, gradeF],
+            }
+    count_score_df = pd.DataFrame(summary_data)
         
         
+    final_df = pd.concat([df, count_score_df], axis=1)
+    final_df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+                
+    df_enc = pd.DataFrame(all_results_encrypt, columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+    
+    return file_path_result
+    
+
+def cluster_37_FMC(config, data, data_range):
+    config_37_FMC = config['cluster_37_FMC']
+    occ_37FMC1_threshold = config_37_FMC['occ_37FMC1']
+    occ_37FMC2_threshold = config_37_FMC['occ_37FMC2']
+    buccal_37FMC_threshold = config_37_FMC['buccal_37FMC']
+    lingual_37FMC_threshold = config_37_FMC['lingual_37FMC']
+    proximal_37FMC_threshold = config_37_FMC['proximal_37FMC']
+    finishingline_threshold = config_37_FMC['finishing_line']
+    toc_37FMC_threshold = config_37_FMC['toc_37FMC']
+    final_score = config_37_FMC['Final_score']
+
+    time_stamp = datetime.now().strftime("%Y-%m-%d")
+    file_name = f"cluster_37_FMC_{time_stamp}.csv"
+    file_name_db = f"cluster_37_FMC_{time_stamp}_encrypt.csv"
+        
+    file_header = config_37_FMC['Header_Format']
+    folder_name_result = "results"
+    folder_name_encrypt = "results_encrypt"
+
+    if not os.path.exists(folder_name_result):
+        os.makedirs(folder_name_result)
+    if not os.path.exists(folder_name_encrypt):
+        os.makedirs(folder_name_encrypt)
+        
+    file_path_result = os.path.join(folder_name_result, file_name)
+    file_path_encrypt = os.path.join(folder_name_encrypt, file_name_db)
+    df = pd.DataFrame(columns=file_header)
+        
+    df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+    df_enc = pd.DataFrame(columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+        
+    all_results = []
+    all_results_encrypt = []
+        
+    crypto_config = config['Encrypt']
+    secretkey = crypto_config['secret']
+    gradeA = 0
+    gradeB = 0
+    gradeC = 0
+    gradeF = 0
+
+    # for i in range(data_range):
+    
+    for i in range(data_range):
+        occ_37FMC = OCC_37FMC(
+            mb_cusp = float(data.iloc[i+2,3]),
+            mb_incline = float(data.iloc[i+2,4]),
+            mb_groove = float(data.iloc[i+2,5]),
+            ml_cusp = float(data.iloc[i+2,6]),
+            ml_incline = float(data.iloc[i+2,7]),
+            ml_groove = float(data.iloc[i+2,8]),
+            db_cusp = float(data.iloc[i+2,9]),
+            db_incline = float(data.iloc[i+2,10]),
+            db_groove = float(data.iloc[i+2,11]),
+            dl_cusp = float(data.iloc[i+2,12]),
+            dl_incline = float(data.iloc[i+2,13]),
+            dl_groove = float(data.iloc[i+2,14]),
+            threshold1 = occ_37FMC1_threshold,
+            threshold2 = occ_37FMC2_threshold
+        )
+        buccal_37FMC = Buccal_37FMC(
+            mbp1 = float(data.iloc[i+2,15]),
+            mbp2 = float(data.iloc[i+2,16]),
+            dbp1 = float(data.iloc[i+2,17]),
+            dbp2 = float(data.iloc[i+2,18]),
+            threshold = buccal_37FMC_threshold
+        )
+        lingual_37FMC =Lingual_37FMC(
+            mlp1 = float(data.iloc[i+2,19]),
+            mlp2 = float(data.iloc[i+2,20]),
+            dlp1 = float(data.iloc[i+2,21]),
+            dlp2 = float(data.iloc[i+2,22]),
+            threshold = lingual_37FMC_threshold
+        )
+        proximal_37FMC = Proximal_37FMC(
+            mesial = float(data.iloc[i+2,23]),
+            distal = float(data.iloc[i+2,24]),
+            threshold = proximal_37FMC_threshold
+        )
+        finishing_line_37FMC = Finishing_line_37FMC(
+            mb = float(data.iloc[i+2,25]),
+            ml = float(data.iloc[i+2,26]),
+            db = float(data.iloc[i+2,27]),
+            dl = float(data.iloc[i+2,28]),
+            mesial = float(data.iloc[i+2,29]),
+            distal = float(data.iloc[i+2,30]),
+            threshold = finishingline_threshold
+        )
+        toc_37FMC = TOC_37FMC(
+            md = float(data.iloc[i+2,31]),
+            bl = float(data.iloc[i+2,33]),
+            threshold = toc_37FMC_threshold
+        )
+        final_grade = "N/A"
+        overall_grade = "N/A"
+        issue =""
+        undercut1 = str(data.iloc[i+2,32])
+        undercut2 = str(data.iloc[i+2,34])
+        
+        finalscore = occ_37FMC.final_score + buccal_37FMC.final_score + lingual_37FMC.final_score + proximal_37FMC.final_score + finishing_line_37FMC.final_score + toc_37FMC.final_score
+        if undercut1 == "no" and undercut2 == "no":
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
+                final_grade = "A"
+                gradeA +=1
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
+                final_grade = "B"
+                gradeB +=1
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
+                final_grade = "C"
+                gradeC +=1
+            else:
+                overall_grade = "F"
+                gradeF +=1
+                final_grade = "F"
+        else:
+            gradeF +=1
+            issue = "undercut"
+            final_grade = "F"
+            if finalscore >= final_score['A'][0] and finalscore <= final_score['A'][1]:
+                overall_grade = "A"
+            elif finalscore >= final_score['B'][0] and finalscore < final_score['B'][1]:
+                overall_grade = "B"
+            elif finalscore >= final_score['C'][0] and finalscore < final_score['C'][1]:
+                overall_grade = "C"
+            else:
+                overall_grade = "F"
+        
+        rowdata = {
+            "student_id": str(data.iloc[i+2,0]),
+            "name": str(data.iloc[i+2,2]),
+            "total_score": finalscore,
+            "final_grade": final_grade,
+            "overall_grade": overall_grade,
+            
+            "OCC_score": occ_37FMC.final_score,
+            "OCC_MB_cusp_grade": occ_37FMC.cusp_mdgrade,
+            "OCC_MB_incline_grade" : occ_37FMC.incline_mdgrade,
+            "OCC_MB_groove_grade": occ_37FMC.groove_mdgrade,
+            "OCC_DB_cusp_grade": occ_37FMC.cusp_dbgrade,
+            "OCC_DB_incline_grade" : occ_37FMC.incline_dbgrade,
+            "OCC_DB_groove_grade": occ_37FMC.groove_dbgrade,
+            "OCC_ML_cusp_grade": occ_37FMC.cusp_mlgrade,
+            "OCC_ML_incline_grade": occ_37FMC.incline_mlgrade,
+            "OCC_ML_groove_grade": occ_37FMC.groove_mlgrade,
+            "OCC_DL_cusp_grade": occ_37FMC.cusp_dlgrade,
+            "OCC_DL_incline_grade": occ_37FMC.incline_dlgrade,
+            "OCC_DL_groove_grade": occ_37FMC.groove_dlgrade,
+            "Buccal_score": buccal_37FMC.final_score,
+            "Buccal_MBP1_grade": buccal_37FMC.mbp1_grade,
+            "Buccal_MBP2_grade": buccal_37FMC.mbp2_grade,
+            "Buccal_DBP1_grade": buccal_37FMC.dbp1_grade,
+            "Buccal_DBP2_grade": buccal_37FMC.dbp2_grade,
+            "Lingual_score": lingual_37FMC.final_score,
+            "Lingual_MLP1_grade":lingual_37FMC.mlp1_grade,
+            "Lingual_MLP2_grade":lingual_37FMC.mlp2_grade,
+            "Lingual_DLP1_grade":lingual_37FMC.dlp1_grade,
+            "Lingual_DLP2_grade":lingual_37FMC.dlp2_grade,
+            "Proximal_score": proximal_37FMC.final_score,
+            "Proximal_mesial_grade": proximal_37FMC.mesial_grade,
+            "Proximal_distal_grade": proximal_37FMC.distal_grade,
+            "Finishing_line_score": finishing_line_37FMC.final_score,
+            "Finishing_line_MB_grade": finishing_line_37FMC.mb_grade,
+            "Finishing_line_ML_grade": finishing_line_37FMC.ml_grade,
+            "Finishing_line_DB_grade": finishing_line_37FMC.db_grade,
+            "Finishing_line_DL_grade": finishing_line_37FMC.dl_grade,
+            "Finishing_line_mesial_grade": finishing_line_37FMC.mesial_grade,
+            "Finishing_line_distal_grade": finishing_line_37FMC.distal_grade,
+            "TOC_score": toc_37FMC.final_score,
+            "TOC_MD_grade": toc_37FMC.md_grade,
+            "TOC_BL_grade": toc_37FMC.bl_grade,
+            "issue":issue
+        }
+                
+        name_encrypt = encrypt_aes256(rowdata["name"], secretkey)
+        row_data_enc = rowdata.copy()
+        row_data_enc["name"] = name_encrypt.hex()
+                
+        all_results.append(rowdata)
+        all_results_encrypt.append(row_data_enc)
+    
+    df = pd.DataFrame(all_results, columns=file_header)
+    totalstudent = len(all_results)
+        
+    summary_data = {
+        "Summary": ["total", "A", "B", "C", "F"], 
+        "Count": [totalstudent, gradeA, gradeB, gradeC, gradeF],
+            }
+    count_score_df = pd.DataFrame(summary_data)
+        
+        
+    final_df = pd.concat([df, count_score_df], axis=1)
+    final_df.to_csv(file_path_result, index=False, encoding="utf-8-sig")
+                
+    df_enc = pd.DataFrame(all_results_encrypt, columns=file_header)
+    df_enc.to_csv(file_path_encrypt, index=False, encoding="utf-8-sig")
+    
+    return file_path_result       
         
         
         
@@ -557,6 +1047,10 @@ def get_cluster_data(type: str, file_path: str):
             calculation_results = cluster_11_lithium(config, data, data_range)
         elif type == '16_PFMC':
             calculation_results = cluster_16_PFMC(config, data, data_range)
+        elif type == '46_FMC':
+            calculation_results = cluster_46_FMC(config, data, data_range)
+        elif type == '37_FMC':
+            calculation_results = cluster_37_FMC(config, data, data_range)
         else:
             raise HTTPException(
                 status_code=400, detail=f"invalid type: {type}"

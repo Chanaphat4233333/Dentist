@@ -1,4 +1,4 @@
-class Lingual_16PFMC:
+class Lingual_37FMC:
     def __init__(self, mlp1, mlp2, dlp1, dlp2, threshold):
         self.mlp1 = mlp1
         self.mlp2 = mlp2

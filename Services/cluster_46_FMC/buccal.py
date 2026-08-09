@@ -1,4 +1,4 @@
-class Buccal_16PFMC:
+class Buccal_46FMC:
     def __init__(self, mbp1, mbp2, dbp1, dbp2, threshold):
         self.mbp1 = mbp1
         self.mbp2 = mbp2
